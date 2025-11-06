@@ -1,0 +1,18 @@
+/* src/Landing.css */
+.landing-bg {
+  width: 100vw;
+  height: 100vh;
+  overflow: 'hidden';
+  background:      /* Bottom-left glow */
+    radial-gradient(circle at -20% 200%, #02E673 40%, transparent 60%),
+
+    /* Bottom-right smaller glow */
+    radial-gradient(ellipse at 95% 120%, #02E673 8%, transparent 40%),
+
+    /* Deep center fill */
+    radial-gradient(circle at 50% 50%, #002E25 10%, #111111 90%);
+  background-blend-mode: overlay;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+}

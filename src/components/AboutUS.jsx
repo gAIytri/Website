@@ -1,0 +1,224 @@
+import React, { useState, useEffect } from 'react';
+import { useSwipeable } from 'react-swipeable';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+
+// Replace with actual images
+ import founder1 from '../assets/Sid.png';
+ import founder2 from '../assets/Jemin.jpeg';
+
+const founders = [
+  {
+    name: 'Sidharth Raj Khandelwal',
+    role: 'Co-Founder & CTO',
+    bio: 'Sidharth leads all things tech at Gaiytri, architecting scalable AI-first platforms and developing intelligent tools that empower businesses. With expertise in full-stack development, automation, and user experience, he brings product ideas to life with code and vision.',
+    image: founder1,
+  },
+  {
+    name: 'John Doe',
+    role: 'Co-Founder & COO',
+    bio: 'John crafts the business and brand strategy at Gaiytri. With a deep focus on operations, partnerships, and customer success, he ensures our AI-driven tools deliver real-world value and help organizations transform ideas into scalable outcomes.',
+    image: founder2,
+  },
+];
+
+const AboutUsSection = () => {
+  const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 830);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 830);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const handleChange = (dir) => {
+    setDirection(dir === 'LEFT' ? 1 : -1);
+    if (dir === 'LEFT') {
+      setIndex((prev) => (prev + 1) % founders.length);
+    } else {
+      setIndex((prev) => (prev - 1 + founders.length) % founders.length);
+    }
+  };
+
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => handleChange('LEFT'),
+    onSwipedRight: () => handleChange('RIGHT'),
+    trackMouse: true,
+  });
+
+  return (
+    <section {...swipeHandlers} style={styles.container}>
+      <button
+        style={{
+          ...styles.arrowLeft,
+          ...(isMobile && { left: '0.3rem', fontSize: '1.2rem' }),
+        }}
+        onClick={() => handleChange('RIGHT')}
+      >
+        <FaChevronLeft />
+      </button>
+
+      <div style={styles.slideWrapper}>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, x: direction * 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -direction * 50 }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
+            style={styles.slide}
+          >
+            <img
+              src={founders[index].image}
+              alt={founders[index].name}
+              style={styles.image}
+            />
+            <div style={styles.textBlock}>
+              <h2 style={styles.name}>{founders[index].name}</h2>
+              <h4 style={styles.role}>{founders[index].role}</h4>
+              <p style={styles.bio}>{founders[index].bio}</p>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <button
+        style={{
+          ...styles.arrowRight,
+          ...(isMobile && { right: '0.3rem', fontSize: '1.2rem' }),
+        }}
+        onClick={() => handleChange('LEFT')}
+      >
+        <FaChevronRight />
+      </button>
+
+      <div style={styles.progressWrapper}>
+        {founders.map((_, i) => (
+          <div
+            key={i}
+            style={{
+              ...styles.progressDot,
+              backgroundColor: i === index ? '#CCCCCC' : '#444',
+            }}
+          />
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export default AboutUsSection;
+
+const styles = {
+  container: {
+    width: '90%',
+    minHeight: '300px',
+    maxHeight: '460px',
+    background:
+      'radial-gradient(circle at 90% 100%, #29B770 -100%, transparent 50%), radial-gradient(circle at 20% 10%, #9AC8B6 0%, #111111 80%)',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '2rem 1.5rem 1.2rem',
+    boxSizing: 'border-box',
+    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.35)',
+    position: 'relative',
+    overflow: 'hidden',
+    borderRadius:'12px'
+  },
+
+  slideWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    minHeight: '250px',
+    position: 'relative',
+  },
+
+  slide: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '2rem',
+    flexWrap: 'nowrap',
+    maxWidth: '900px',
+    padding: '1rem 2rem',
+    textAlign: 'left',
+  },
+
+  image: {
+    width: '200px',
+    height: '200px',
+    borderRadius: '20%',
+    objectFit: 'cover',
+    border: '2px solid transparent',
+  },
+
+  textBlock: {
+    flex: 1,
+    color: '#E9EAE8',
+    fontFamily: 'Poppins, sans-serif',
+    maxWidth: '600px',
+  },
+
+  name: {
+    fontSize: '1.45rem',
+    fontWeight: '600',
+    marginBottom: '0.25rem',
+  },
+
+  role: {
+    fontSize: '1rem',
+    color: '#aaa',
+    marginBottom: '0.6rem',
+  },
+
+  bio: {
+    fontSize: '0.92rem',
+    opacity: 0.85,
+    lineHeight: 1.45,
+  },
+
+  arrowLeft: {
+    position: 'absolute',
+    left: '1rem',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    background: 'none',
+    border: 'none',
+    color: 'rgba(255, 255, 255, 0.4)',
+    fontSize: '1.5rem',
+    cursor: 'pointer',
+    zIndex: 10,
+  },
+
+  arrowRight: {
+    position: 'absolute',
+    right: '1rem',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    background: 'none',
+    border: 'none',
+    color: 'rgba(255, 255, 255, 0.4)',
+    fontSize: '1.5rem',
+    cursor: 'pointer',
+    zIndex: 10,
+  },
+
+  progressWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '8px',
+    marginTop: '1rem',
+    flexWrap: 'wrap',
+  },
+
+  progressDot: {
+    height: '6px',
+    width: '28px',
+    borderRadius: '3px',
+    transition: 'background-color 0.3s ease',
+  },
+};
