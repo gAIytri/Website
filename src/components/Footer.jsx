@@ -67,11 +67,11 @@ const Footer = () => {
         <img src={logo} alt="Gaiytri Logo" style={styles.logoImage} />
 
         {/* Right: 3 Links in column */}
-        <div style={styles.linkColumn}>
+        {/* <div style={styles.linkColumn}>
           <a href="#" style={styles.link}>Coming Soon</a>
           <a href="#" style={styles.link}>About Us</a>
           <a href="#" style={styles.link}>Contact Us</a>
-        </div>
+        </div> */}
       </div>
 
       {/* Divider */}
