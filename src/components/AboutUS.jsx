@@ -3,9 +3,8 @@ import { useSwipeable } from 'react-swipeable';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-// Replace with actual images
- import founder1 from '../assets/Sid.png';
- import founder2 from '../assets/Jemin.jpeg';
+import founder1 from '../assets/Sid.png';
+import founder2 from '../assets/Jemin.jpeg';
 
 const founders = [
   {
@@ -15,9 +14,9 @@ const founders = [
     image: founder1,
   },
   {
-    name: 'John Doe',
+    name: 'Jemin Patel',
     role: 'Co-Founder & COO',
-    bio: 'John crafts the business and brand strategy at Gaiytri. With a deep focus on operations, partnerships, and customer success, he ensures our AI-driven tools deliver real-world value and help organizations transform ideas into scalable outcomes.',
+    bio: 'Jemin crafts the business and brand strategy at Gaiytri. With a deep focus on operations, partnerships, and customer success, he ensures our AI-driven tools deliver real-world value and help organizations transform ideas into scalable outcomes.',
     image: founder2,
   },
 ];
@@ -48,8 +47,11 @@ const AboutUsSection = () => {
     trackMouse: true,
   });
 
+  const founder = founders[index];
+
   return (
     <section {...swipeHandlers} style={styles.container}>
+      {/* Left Arrow */}
       <button
         style={{
           ...styles.arrowLeft,
@@ -60,6 +62,7 @@ const AboutUsSection = () => {
         <FaChevronLeft />
       </button>
 
+      {/* Founder Slide */}
       <div style={styles.slideWrapper}>
         <AnimatePresence mode="wait">
           <motion.div
@@ -68,22 +71,38 @@ const AboutUsSection = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -direction * 50 }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
-            style={styles.slide}
+            style={{
+              ...styles.slide,
+              flexDirection: isMobile ? 'column' : 'row',
+              textAlign: isMobile ? 'center' : 'left',
+            }}
           >
             <img
-              src={founders[index].image}
-              alt={founders[index].name}
-              style={styles.image}
+              src={founder.image}
+              alt={founder.name}
+              style={{
+                ...styles.image,
+                width: isMobile ? '160px' : '200px',
+                height: isMobile ? '160px' : '200px',
+              }}
             />
+
             <div style={styles.textBlock}>
-              <h2 style={styles.name}>{founders[index].name}</h2>
-              <h4 style={styles.role}>{founders[index].role}</h4>
-              <p style={styles.bio}>{founders[index].bio}</p>
+              <h2 style={styles.name}>{founder.name}</h2>
+
+              {/* Show role & bio only if not mobile */}
+              {!isMobile && (
+                <>
+                  <h4 style={styles.role}>{founder.role}</h4>
+                  <p style={styles.bio}>{founder.bio}</p>
+                </>
+              )}
             </div>
           </motion.div>
         </AnimatePresence>
       </div>
 
+      {/* Right Arrow */}
       <button
         style={{
           ...styles.arrowRight,
@@ -94,6 +113,7 @@ const AboutUsSection = () => {
         <FaChevronRight />
       </button>
 
+      {/* Progress Dots */}
       <div style={styles.progressWrapper}>
         {founders.map((_, i) => (
           <div
@@ -111,6 +131,7 @@ const AboutUsSection = () => {
 
 export default AboutUsSection;
 
+// ---------- Styles ----------
 const styles = {
   container: {
     width: '90%',
@@ -126,9 +147,8 @@ const styles = {
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.35)',
     position: 'relative',
     overflow: 'hidden',
-    borderRadius:'12px'
+    borderRadius: '12px',
   },
-
   slideWrapper: {
     display: 'flex',
     alignItems: 'center',
@@ -137,7 +157,6 @@ const styles = {
     minHeight: '250px',
     position: 'relative',
   },
-
   slide: {
     display: 'flex',
     alignItems: 'center',
@@ -145,42 +164,33 @@ const styles = {
     flexWrap: 'nowrap',
     maxWidth: '900px',
     padding: '1rem 2rem',
-    textAlign: 'left',
   },
-
   image: {
-    width: '200px',
-    height: '200px',
     borderRadius: '20%',
     objectFit: 'cover',
     border: '2px solid transparent',
   },
-
   textBlock: {
     flex: 1,
     color: '#E9EAE8',
     fontFamily: 'Poppins, sans-serif',
     maxWidth: '600px',
   },
-
   name: {
-    fontSize: '1.45rem',
+    fontSize: '1.4rem',
     fontWeight: '600',
-    marginBottom: '0.25rem',
+    marginTop: '0.6rem',
   },
-
   role: {
     fontSize: '1rem',
     color: '#aaa',
     marginBottom: '0.6rem',
   },
-
   bio: {
     fontSize: '0.92rem',
     opacity: 0.85,
     lineHeight: 1.45,
   },
-
   arrowLeft: {
     position: 'absolute',
     left: '1rem',
@@ -193,7 +203,6 @@ const styles = {
     cursor: 'pointer',
     zIndex: 10,
   },
-
   arrowRight: {
     position: 'absolute',
     right: '1rem',
@@ -206,7 +215,6 @@ const styles = {
     cursor: 'pointer',
     zIndex: 10,
   },
-
   progressWrapper: {
     display: 'flex',
     justifyContent: 'center',
@@ -214,7 +222,6 @@ const styles = {
     marginTop: '1rem',
     flexWrap: 'wrap',
   },
-
   progressDot: {
     height: '6px',
     width: '28px',

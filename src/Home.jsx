@@ -91,9 +91,7 @@ const Home = ({slidingRef, aboutRef}) => {
                <h2 style={styles.title}>Product & servcies</h2>
                 <SlidingSection />
 
-                    
-
-   
+                  
         </div>
                
          
