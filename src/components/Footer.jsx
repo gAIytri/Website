@@ -79,12 +79,7 @@ const Footer = () => {
 
       {/* Bottom Section */}
       <div style={styles.bottomSection}>
-        <div style={styles.socials}>
-          <a href="#" style={styles.socialIcon}>🌐</a>
-          <a href="#" style={styles.socialIcon}>🐦</a>
-          <a href="#" style={styles.socialIcon}>📘</a>
-          <a href="#" style={styles.socialIcon}>📷</a>
-        </div>
+    
         <div style={styles.copyright}>
           © {new Date().getFullYear()} Gaiytri. All rights reserved.
         </div>
