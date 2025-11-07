@@ -80,6 +80,7 @@ const Footer = () => {
       {/* Bottom Section */}
       <div style={styles.bottomSection}>
     
+    
         <div style={styles.copyright}>
           © {new Date().getFullYear()} Gaiytri. All rights reserved.
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSwipeable } from 'react-swipeable';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -20,14 +20,14 @@ const slides = [
 
 const SlidingSection = () => {
   const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState(0); // 1 for right, -1 for left
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 830);
+  const [direction, setDirection] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 630);
 
-React.useEffect(() => {
-  const handleResize = () => setIsMobile(window.innerWidth <= 830);
-  window.addEventListener('resize', handleResize);
-  return () => window.removeEventListener('resize', handleResize);
-}, []);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 630);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleChange = (dir) => {
     setDirection(dir === 'LEFT' ? 1 : -1);
@@ -44,24 +44,46 @@ React.useEffect(() => {
     trackMouse: true,
   });
 
-  return (
-    <section {...swipeHandlers} style={styles.container}>
-      {/* <h2 style={styles.heading}>We Provide</h2> */}
-        <button
-        style={{
-            ...styles.arrowLeft,
-            ...(isMobile && {
-            left: '0.3rem',
-            fontSize: '1.2rem',
-            }),
-        }}
-        onClick={() => handleChange('RIGHT')}
-        >
-        <FaChevronLeft />
-        </button>
-      <div style={styles.slideWrapper}>
-        
+  // Dynamically computed inline styles based on mobile/desktop
+  const containerStyle = {
+    ...styles.container,
+    padding: isMobile ? '2rem 0.5rem' : '2rem 1.5rem',
+    minHeight: isMobile ? '320px' : '400px',
+  };
 
+  const titleStyle = {
+    ...styles.title,
+    fontSize: isMobile ? '1.6rem' : '2.55rem',
+    marginBottom: isMobile ? '0.5rem' : '0.7rem',
+  };
+
+  const textStyle = {
+    ...styles.text,
+    fontSize: isMobile ? '0.9rem' : '1.55rem',
+    lineHeight: isMobile ? 1.4 : 1.6,
+  };
+
+  const arrowLeftStyle = {
+    ...styles.arrow,
+    left: isMobile ? '0.3rem' : '1rem',
+    fontSize: isMobile ? '1.2rem' : '1.5rem',
+  };
+
+  const arrowRightStyle = {
+    ...styles.arrow,
+    right: isMobile ? '0.3rem' : '0.1rem',
+    fontSize: isMobile ? '1.2rem' : '1.5rem',
+  };
+
+  return (
+    <section {...swipeHandlers} style={containerStyle}>
+      {/* Left Arrow */}
+      <button style={arrowLeftStyle} onClick={() => handleChange('RIGHT')}>
+        <FaChevronLeft />
+      </button>
+
+      {/* Slides */}
+      <div style={styles.slideWrapper}>
         <AnimatePresence mode="wait">
           <motion.div
             key={index}
@@ -72,27 +94,19 @@ React.useEffect(() => {
             style={styles.slide}
           >
             <div style={styles.textBlock}>
-              <h2 style={styles.title}>{slides[index].title}</h2>
-              <p style={styles.text}>{slides[index].text}</p>
+              <h2 style={titleStyle}>{slides[index].title}</h2>
+              <p style={textStyle}>{slides[index].text}</p>
             </div>
           </motion.div>
         </AnimatePresence>
-
-        
       </div>
-            <button
-            style={{
-                ...styles.arrowRight,
-                ...(isMobile && {
-                right: '0.3rem',
-                fontSize: '1.2rem',
-                }),
-            }}
-            onClick={() => handleChange('LEFT')}
-            >
-            <FaChevronRight />
-            </button>
 
+      {/* Right Arrow */}
+      <button style={arrowRightStyle} onClick={() => handleChange('LEFT')}>
+        <FaChevronRight />
+      </button>
+
+      {/* Progress Dots */}
       <div style={styles.progressWrapper}>
         {slides.map((_, i) => (
           <div
@@ -109,88 +123,59 @@ React.useEffect(() => {
 };
 
 export default SlidingSection;
+
 const styles = {
   container: {
     width: '90%',
-    minHeight: '400px',
-    maxHeight: '440px',
     background:
       'radial-gradient(circle at 20% 100%, #29B770 -100%, transparent 50%), radial-gradient(circle at 90% 10%, #9AC8B6 0%, #111111 80%)',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: '2rem 1.5rem 1.2rem',
-    boxSizing: 'border-box',
-    borderRadius:'12px',
+    borderRadius: '12px',
     position: 'relative',
     overflow: 'hidden',
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.35)',
+    boxSizing: 'border-box',
   },
-
   slideWrapper: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    minHeight: '230px',
     position: 'relative',
-    flexWrap: 'nowrap',
   },
-
   slide: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100%',
+    textAlign: 'center',
     maxWidth: '800px',
     padding: '0 2rem',
-    textAlign: 'center',
   },
-
   textBlock: {
     flex: 1,
     color: '#E9EAE8',
     fontFamily: 'Poppins, sans-serif',
-    maxWidth: '600px',
   },
-
   title: {
-    fontSize: '2.55rem',
-    marginBottom: '0.7rem',
+    fontWeight: 600,
   },
-
   text: {
-    fontSize: '1.55rem',
     opacity: 0.85,
-    lineHeight: 1.45,
   },
-
-  arrowLeft: {
+  arrow: {
     position: 'absolute',
-    left: '0.1rem',
     top: '50%',
     transform: 'translateY(-50%)',
     background: 'none',
     border: 'none',
     color: 'rgba(255, 255, 255, 0.4)',
-    fontSize: '1.5rem',
     cursor: 'pointer',
     zIndex: 10,
+   
+   
   },
-
-  arrowRight: {
-    position: 'absolute',
-    right: '0.1rem',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    background: 'none',
-    border: 'none',
-    color: 'rgba(255, 255, 255, 0.4)',
-    fontSize: '1.5rem',
-    cursor: 'pointer',
-    zIndex: 10,
-  },
-
   progressWrapper: {
     display: 'flex',
     justifyContent: 'center',
@@ -198,42 +183,10 @@ const styles = {
     marginTop: '1rem',
     flexWrap: 'wrap',
   },
-
   progressDot: {
     height: '6px',
     width: '28px',
     borderRadius: '3px',
     transition: 'background-color 0.3s ease',
   },
-
-  // Media Queries in JS
-  ...(window.innerWidth <= 830 && {
-    arrowLeft: {
-      position: 'absolute',
-      left: '0.3rem',
-      top: '50%',
-      transform: 'translateX(-50%)',
-      fontSize: '1.2rem',
-    },
-    arrowRight: {
-      position: 'absolute',
-      right: '0.3rem',
-      top: '50%',
-      transform: 'translateX(-50%)',
-      fontSize: '1.2rem',
-    },
-    title: {
-      fontSize: '1.35rem',
-    },
-    text: {
-      fontSize: '0.85rem',
-      lineHeight: 1.35,
-    },
-    progressWrapper: {
-      marginTop: '1.2rem',
-    },
-    container: {
-        padding: '2rem 0rem 1.2rem',
-    }
-  }),
 };
