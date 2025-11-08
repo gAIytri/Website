@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSwipeable } from 'react-swipeable';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, color } from 'framer-motion';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 import founder1 from '../assets/Sid.png';
@@ -82,8 +82,8 @@ const AboutUsSection = () => {
               alt={founder.name}
               style={{
                 ...styles.image,
-                width: isMobile ? '160px' : '200px',
-                height: isMobile ? '160px' : '200px',
+                width: isMobile ? '160px' : '300px',
+                height: isMobile ? '160px' : '300px',
               }}
             />
 
@@ -134,12 +134,10 @@ export default AboutUsSection;
 // ---------- Styles ----------
 const styles = {
   container: {
-    width: '90%',
-    minHeight: '300px',
+    width: '50%',
+    minHeight: '400px',
     maxHeight: '460px',
-    background:
-      'radial-gradient(circle at 90% 100%, #29B770 -100%, transparent 50%), radial-gradient(circle at 20% 10%, #9AC8B6 0%, #111111 80%)',
-    display: 'flex',
+      display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     padding: '2rem 1.5rem 1.2rem',
@@ -148,6 +146,8 @@ const styles = {
     position: 'relative',
     overflow: 'hidden',
     borderRadius: '12px',
+    backgroundColor:'#E0E9CC',
+    justifyContent:'center'
   },
   slideWrapper: {
     display: 'flex',
@@ -179,17 +179,21 @@ const styles = {
   name: {
     fontSize: '1.4rem',
     fontWeight: '600',
-    marginTop: '0.6rem',
+   margin:0,
+    color:'#072D1F'
   },
   role: {
     fontSize: '1rem',
     color: '#aaa',
-    marginBottom: '0.6rem',
+     color:'#072D1F',
+     opacity:0.7,
+     margin:0
   },
   bio: {
-    fontSize: '0.92rem',
+    fontSize: '1.3rem',
     opacity: 0.85,
     lineHeight: 1.45,
+     color:'#072D1F',
   },
   arrowLeft: {
     position: 'absolute',
@@ -198,7 +202,7 @@ const styles = {
     transform: 'translateY(-50%)',
     background: 'none',
     border: 'none',
-    color: 'rgba(255, 255, 255, 0.4)',
+    color: '#111111',
     fontSize: '1.5rem',
     cursor: 'pointer',
     zIndex: 10,
@@ -210,7 +214,7 @@ const styles = {
     transform: 'translateY(-50%)',
     background: 'none',
     border: 'none',
-    color: 'rgba(255, 255, 255, 0.4)',
+    color: '#111111',
     fontSize: '1.5rem',
     cursor: 'pointer',
     zIndex: 10,

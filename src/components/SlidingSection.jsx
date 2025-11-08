@@ -59,8 +59,9 @@ const SlidingSection = () => {
 
   const textStyle = {
     ...styles.text,
-    fontSize: isMobile ? '0.9rem' : '1.55rem',
-    lineHeight: isMobile ? 1.4 : 1.6,
+    fontSize: isMobile ? '0.9rem' : '1.3rem',
+    lineHeight: isMobile ? 1.2 : 1.4,
+
   };
 
   const arrowLeftStyle = {
@@ -126,10 +127,8 @@ export default SlidingSection;
 
 const styles = {
   container: {
-    width: '90%',
-    background:
-      'radial-gradient(circle at 20% 100%, #29B770 -100%, transparent 50%), radial-gradient(circle at 90% 10%, #9AC8B6 0%, #111111 80%)',
-    display: 'flex',
+    width: '50%',
+      display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     borderRadius: '12px',
@@ -137,6 +136,7 @@ const styles = {
     overflow: 'hidden',
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.35)',
     boxSizing: 'border-box',
+    backgroundColor:'#E0E9CC'
   },
   slideWrapper: {
     display: 'flex',
@@ -155,7 +155,7 @@ const styles = {
   },
   textBlock: {
     flex: 1,
-    color: '#E9EAE8',
+    color: '#072D1F',
     fontFamily: 'Poppins, sans-serif',
   },
   title: {
@@ -170,7 +170,7 @@ const styles = {
     transform: 'translateY(-50%)',
     background: 'none',
     border: 'none',
-    color: 'rgba(255, 255, 255, 0.4)',
+    color: 'rgba(0, 0, 0, 0.4)',
     cursor: 'pointer',
     zIndex: 10,
    

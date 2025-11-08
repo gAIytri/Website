@@ -60,24 +60,36 @@ const ContactUsForm = () => {
             placeholder="Company (optional)"
             value={formData.company}
             onChange={handleChange}
-            style={styles.input}
+            style={styles.input }
           />
-          <select
-          name="industry"
-          value={formData.industry}
-          onChange={handleChange}
-          required
-          style={styles.input}
-        >
-          <option value="" disabled>Select Industry *</option>
-          <option value="Transit">Transit</option>
-          <option value="Ecommerce">Ecommerce</option>
-          <option value="Retail">Retail</option>
-          <option value="Food">Food</option>
-          <option value="Education">Education</option>
-          <option value="Technology">Technology</option>
-        </select>
-        
+          
+        <select
+  name="industry"
+  value={formData.industry}
+  onChange={handleChange}
+  required
+  style={{
+    ...styles.input,
+    appearance: 'none',          // Removes default arrow + styling (Safari/Chrome)
+    WebkitAppearance: 'none',    // Removes white glossy overlay (Safari)
+    MozAppearance: 'none',       // Firefox
+    backgroundColor: '#072D1F',  // Force same background as inputs
+    color: '#f4f4f4',
+    opacity: 1,                  // Make text fully visible
+    backgroundImage: 'none',     // Prevents gradient overlays
+    cursor: 'pointer',
+  }}
+>
+  <option value="" disabled hidden style={{ color: '#888' }}>
+    Select Industry *
+  </option>
+  <option value="Transit">Transit</option>
+  <option value="Ecommerce">Ecommerce</option>
+  <option value="Retail">Retail</option>
+  <option value="Food">Food</option>
+  <option value="Education">Education</option>
+  <option value="Technology">Technology</option>
+</select>
           <input
             type="email"
             name="email"
@@ -97,13 +109,22 @@ const ContactUsForm = () => {
           
           onChange={handleChange}
           required
-          style={{ ...styles.input, height: '100px', width: '100%' }}
+          style={{ ...styles.input, height: '100px', width: '100%',color:'#f4f4f4'}}
         />
         </div>
 
 
         <button type="submit" style={styles.button}>Submit</button>
       </form>
+            <style>
+      {`
+        input::placeholder,
+        textarea::placeholder {
+          color: #f4f4f4;
+          opacity: 1;
+        }
+      `}
+      </style>
     </section>
   );
 };
@@ -112,23 +133,16 @@ export default ContactUsForm;
 
 const styles = {
   container: {
-    padding: '2rem 2rem',
+    padding: '2.5rem 2.5rem',
     width: '80%',
     margin: 'auto',
-    background: 'radial-gradient(circle at 50% 10%, #98C7AC -90%,  #072D1F 20%, transparent 70%), radial-gradient(circle at 20% 100%, #9AC8B6 -40%, transparent 60%), radial-gradient(circle at 80% 0%, #9AC8B6 -40%, transparent 60%)',
-    color: '#E9EAE8',
+    color: '#f4f4f4',
     fontFamily: 'Poppins, sans-serif',
     paddingBottom:'1rem',
     paddingTop:'1rem',
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.35)',
-  },
-  heading: {
-    fontSize: '1.8rem',
-    marginBottom: '1.5rem',
-    textAlign: 'center',
-    margin:0,
-    marginBottom:'0.5rem'
-    
+    backgroundColor:'#E0E9CC',
+    borderRadius:"12px"
   },
   form: {
     display: 'flex',
@@ -140,27 +154,27 @@ const styles = {
     gap: '1rem',
     flexWrap: 'wrap',
   },
-  input: {
-    flex: 1,
-    borderRadius: '8px',
-    border: '1px solid #444',
-    backgroundColor: '#F4F4F4',
-    color: '#111111',
-    fontSize: '0.95rem',
-    opacity:0.7,
-    padding:'0.8rem 0.8rem',
-
-
-  },
+input: {
+  flex: 1,
+  borderRadius: '8px',
+  border: '1px solid #444',
+  backgroundColor: '#072D1F',
+  color: '#f4f4f4',
+  fontSize: '1rem',
+  padding: '0.8rem 0.8rem',
+  fontWeight: '500',
+  opacity: 1,
+  outline: 'none',
+},
   button: {
     padding: '0.9rem',
-    backgroundColor: '#F4F4F4',
-    color: '#111111',
+    backgroundColor: '#072D1F',
+    color: '#f4f4f4',
     border: 'none',
     borderRadius: '8px',
     fontSize: '1rem',
     fontWeight: '600',
     cursor: 'pointer',
-    opacity:0.7
+    opacity:1
   },
 };

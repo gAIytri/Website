@@ -17,13 +17,13 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
-    fontSize: '2.5rem',
+    fontSize: '3.2rem',
     fontFamily: 'Poppins, sans-serif',
     color: '#E9EAE8',
     margin: 0,
   },
   subtext: {
-    fontSize: '1rem',
+    fontSize: '1.2rem',
     fontWeight: 300,
     textAlign: 'center',
     opacity: 0.85,
@@ -60,7 +60,7 @@ slidingLeftFlush: {
     flexDirection:'column',
   },
     title: {
-    fontSize: '3.55rem',
+    fontSize: '3rem',
     marginBottom: '0.7rem',
     textAlign:'center',
     marginBottom:"1.5rem"
