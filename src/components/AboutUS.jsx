@@ -134,7 +134,7 @@ export default AboutUsSection;
 // ---------- Styles ----------
 const styles = {
   container: {
-    width: '50%',
+    width: '80%',
     minHeight: '400px',
     maxHeight: '460px',
       display: 'flex',

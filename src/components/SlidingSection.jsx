@@ -66,13 +66,13 @@ const SlidingSection = () => {
 
   const arrowLeftStyle = {
     ...styles.arrow,
-    left: isMobile ? '0.3rem' : '1rem',
+    left: isMobile ? '0.75rem' : '1rem',
     fontSize: isMobile ? '1.2rem' : '1.5rem',
   };
 
   const arrowRightStyle = {
     ...styles.arrow,
-    right: isMobile ? '0.3rem' : '0.1rem',
+    right: isMobile ? '0.75rem' : '1rem',
     fontSize: isMobile ? '1.2rem' : '1.5rem',
   };
 
@@ -127,7 +127,7 @@ export default SlidingSection;
 
 const styles = {
   container: {
-    width: '50%',
+    width: '80%',
       display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
