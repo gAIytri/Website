@@ -33,6 +33,7 @@ const CenteredChat = () => {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const question = inputValue; // Store before clearing
     setInputValue('');
     setIsLoading(true);
 
@@ -43,13 +44,23 @@ const CenteredChat = () => {
         content: msg.text
       }));
 
-      const response = await fetch(`${API_URL}/ask`, {
+      // Create placeholder bot message for streaming
+      const botMessageIndex = messages.length + 1;
+      const botMessage = {
+        type: 'bot',
+        text: '',
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, botMessage]);
+
+      // Use streaming endpoint
+      const response = await fetch(`${API_URL}/ask/stream`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          question: inputValue,
+          question: question,
           chat_history: chatHistory,
         }),
       });
@@ -58,23 +69,70 @@ const CenteredChat = () => {
         throw new Error('Failed to get response');
       }
 
-      const data = await response.json();
+      // Read streaming response
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let accumulatedText = '';
 
-      const botMessage = {
-        type: 'bot',
-        text: data.success ? data.answer : data.error || 'Sorry, I encountered an error. Please try again.',
-        timestamp: new Date(),
-      };
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
 
-      setMessages((prev) => [...prev, botMessage]);
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(line.slice(6));
+
+              if (data.done) {
+                // Streaming complete
+                break;
+              }
+
+              if (data.content) {
+                accumulatedText += data.content;
+                // Update the bot message in real-time
+                setMessages((prev) => {
+                  const newMessages = [...prev];
+                  newMessages[botMessageIndex] = {
+                    ...newMessages[botMessageIndex],
+                    text: accumulatedText
+                  };
+                  return newMessages;
+                });
+              }
+
+              if (data.error) {
+                console.error('Error in streaming:', data.content);
+              }
+            } catch (e) {
+              console.error('Error parsing SSE data:', e);
+            }
+          }
+        }
+      }
+
+      setIsLoading(false);
+
     } catch (error) {
+      console.error('Error in handleSend:', error);
       const errorMessage = {
         type: 'bot',
         text: 'Sorry, I\'m having trouble connecting. Please make sure the API server is running.',
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
+      setMessages((prev) => {
+        // Replace the empty bot message with error message
+        const newMessages = [...prev];
+        if (newMessages[newMessages.length - 1].text === '') {
+          newMessages[newMessages.length - 1] = errorMessage;
+        } else {
+          newMessages.push(errorMessage);
+        }
+        return newMessages;
+      });
       setIsLoading(false);
     }
   };
