@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react';
+import { useState } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Home from './Home';
+import Home from './home';
+import { ToastProvider } from './components/ToastContainer';
 
 const styles = {
 appWrapper: {
@@ -45,29 +46,63 @@ mainContent: {
 };
 
 function App() {
-  const slidingRef = useRef(null);
-  const aboutRef = useRef(null);
+  const [sectionRefs, setSectionRefs] = useState(null);
 
   const scrollToSection = (ref) => {
-    if (ref?.current) {
-      ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    console.log('scrollToSection called', ref);
+    if (ref && ref.current) {
+      console.log('Ref exists, scrolling to:', ref.current);
+      const yOffset = -80; // Offset for navbar height
+      const element = ref.current;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    } else {
+      console.log('Ref not found or not ready');
     }
   };
 
   return (
-    <div style={styles.appWrapper}>
-      <div style={styles.gradientOverlay}></div>
-      <div style={styles.contentWrapper}>
-    <Navbar
-        onComingSoonClick={() => scrollToSection(slidingRef)}
-        onAboutUsClick={() => scrollToSection(aboutRef)}
-      />
-        <main style={styles.mainContent}>
-     <Home slidingRef={slidingRef} aboutRef={aboutRef} />
-        </main>
-        <Footer />
+    <ToastProvider>
+      <div style={styles.appWrapper}>
+        <div style={styles.gradientOverlay}></div>
+        <div style={styles.contentWrapper}>
+          <Navbar
+            onProductsClick={() => {
+              if (sectionRefs?.productsRef) {
+                scrollToSection(sectionRefs.productsRef);
+              }
+            }}
+            onServicesClick={() => {
+              if (sectionRefs?.servicesRef) {
+                scrollToSection(sectionRefs.servicesRef);
+              }
+            }}
+            onContactClick={() => {
+              // TODO: Navigate to Contact page
+              console.log('Contact Us clicked');
+            }}
+          />
+          <main style={styles.mainContent}>
+            <Home onRefsReady={setSectionRefs} />
+          </main>
+          <Footer
+            onProductsClick={() => {
+              console.log('Footer Products clicked', sectionRefs);
+              if (sectionRefs?.productsRef) {
+                scrollToSection(sectionRefs.productsRef);
+              }
+            }}
+            onServicesClick={() => {
+              console.log('Footer Services clicked', sectionRefs);
+              if (sectionRefs?.servicesRef) {
+                scrollToSection(sectionRefs.servicesRef);
+              }
+            }}
+          />
+        </div>
       </div>
-    </div>
+    </ToastProvider>
   );
 }
 

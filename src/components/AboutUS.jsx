@@ -184,10 +184,9 @@ const styles = {
   },
   role: {
     fontSize: '1rem',
-    color: '#aaa',
-     color:'#072D1F',
-     opacity:0.7,
-     margin:0
+    color:'#072D1F',
+    opacity:0.7,
+    margin:0
   },
   bio: {
     fontSize: '1.3rem',

@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
+import { flushSync } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useMediaQuery } from 'react-responsive';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -10,6 +12,16 @@ const CenteredChat = () => {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const chatAreaRef = useRef(null);
+
+  // Responsive placeholder text
+  const isSmallScreen = useMediaQuery({ query: '(max-width: 600px)' });
+  const isVerySmallScreen = useMediaQuery({ query: '(max-width: 400px)' });
+
+  const getPlaceholder = () => {
+    if (isVerySmallScreen) return 'Ask about Gaiytri...';
+    if (isSmallScreen) return 'Ask me about Gaiytri...';
+    return 'Ask me anything about Gaiytri - our services, team, pricing, or mission...';
+  };
 
   const scrollToBottom = () => {
     if (chatAreaRef.current) {
@@ -44,15 +56,6 @@ const CenteredChat = () => {
         content: msg.text
       }));
 
-      // Create placeholder bot message for streaming
-      const botMessageIndex = messages.length + 1;
-      const botMessage = {
-        type: 'bot',
-        text: '',
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, botMessage]);
-
       // Use streaming endpoint
       const response = await fetch(`${API_URL}/ask/stream`, {
         method: 'POST',
@@ -73,6 +76,7 @@ const CenteredChat = () => {
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let accumulatedText = '';
+      let botMessageAdded = false;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -93,15 +97,37 @@ const CenteredChat = () => {
 
               if (data.content) {
                 accumulatedText += data.content;
-                // Update the bot message in real-time
-                setMessages((prev) => {
-                  const newMessages = [...prev];
-                  newMessages[botMessageIndex] = {
-                    ...newMessages[botMessageIndex],
-                    text: accumulatedText
-                  };
-                  return newMessages;
-                });
+                console.log('Streaming chunk:', data.content, 'Total:', accumulatedText);
+
+                // Add bot message on first chunk only
+                if (!botMessageAdded) {
+                  flushSync(() => {
+                    const botMessage = {
+                      type: 'bot',
+                      text: accumulatedText,
+                      timestamp: new Date(),
+                    };
+                    setMessages((prev) => [...prev, botMessage]);
+                  });
+                  botMessageAdded = true;
+                } else {
+                  // Update existing bot message immediately with flushSync
+                  flushSync(() => {
+                    setMessages((prev) => {
+                      const newMessages = [...prev];
+                      const lastIndex = newMessages.length - 1;
+                      newMessages[lastIndex] = {
+                        ...newMessages[lastIndex],
+                        text: accumulatedText,
+                        timestamp: newMessages[lastIndex].timestamp // Keep original timestamp
+                      };
+                      return newMessages;
+                    });
+                  });
+                }
+
+                // Force browser to paint by yielding control (20ms delay for visible streaming)
+                await new Promise(resolve => setTimeout(resolve, 20));
               }
 
               if (data.error) {
@@ -123,33 +149,25 @@ const CenteredChat = () => {
         text: 'Sorry, I\'m having trouble connecting. Please make sure the API server is running.',
         timestamp: new Date(),
       };
-      setMessages((prev) => {
-        // Replace the empty bot message with error message
-        const newMessages = [...prev];
-        if (newMessages[newMessages.length - 1].text === '') {
-          newMessages[newMessages.length - 1] = errorMessage;
-        } else {
-          newMessages.push(errorMessage);
-        }
-        return newMessages;
-      });
+      setMessages((prev) => [...prev, errorMessage]);
       setIsLoading(false);
     }
   };
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container} className="chat-container">
       <div style={styles.chatWrapper}>
 
         {/* Dynamic Height Chat Area */}
         <div
           ref={chatAreaRef}
+          className="chat-messages-area"
           style={{
             ...styles.chatArea,
-            maxHeight: messages.length === 0 ? '0px' : '500px',
-            minHeight: messages.length === 0 ? '0px' : 'auto',
-            paddingTop: messages.length === 0 ? '0' : '1rem',
-            paddingBottom: messages.length === 0 ? '0' : '1rem',
+            maxHeight: '400px',
+            height: 'auto',
+            padding: '1rem',
+            display: messages.length === 0 ? 'none' : 'flex',
           }}
         >
           {/* Messages Container */}
@@ -217,18 +235,20 @@ const CenteredChat = () => {
         {/* Input Section */}
         <div style={styles.inputSection}>
           <form onSubmit={handleSendMessage} style={styles.inputForm}>
-            <div style={styles.inputWrapper}>
+            <div style={styles.inputWrapper} className="chat-input-wrapper">
               <input
                 ref={inputRef}
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Ask me anything about Gaiytri - our services, team, pricing, or mission..."
+                placeholder={getPlaceholder()}
                 style={styles.input}
+                className="chat-input"
                 disabled={isLoading}
               />
               <button
                 type="submit"
+                className="chat-send-button"
                 style={{
                   ...styles.sendButton,
                   opacity: !inputValue.trim() || isLoading ? 0.5 : 1,
@@ -256,15 +276,15 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'flex-start',
-    padding: '0 clamp(0.75rem, 3vw, 2rem)',
+    padding: '0 clamp(0.75rem, 2vw, 1.5rem)',
   },
 
   chatWrapper: {
     width: '100%',
-    maxWidth: '900px',
+    maxWidth: '850px',
     display: 'flex',
     flexDirection: 'column',
-    gap: 'clamp(0.75rem, 2vw, 1rem)',
+    gap: 'clamp(0.5rem, 1.5vw, 0.75rem)',
   },
 
   chatArea: {
@@ -275,6 +295,8 @@ const styles = {
     padding: '0 1rem',
     scrollBehavior: 'smooth',
     transition: 'all 0.3s ease',
+    backgroundColor:'rgba(0,0,0,0.8)',
+    borderRadius:'10px'
   },
 
   // Welcome Section
@@ -306,7 +328,7 @@ const styles = {
   messagesContainer: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '2rem',
+    gap: '1rem',
     padding: '0.5rem',
   },
 
@@ -364,11 +386,11 @@ const styles = {
     fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
     lineHeight: '1.6',
     color: '#E9EAE8',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    backgroundColor: 'rgba(17, 17, 17, 0.9)',
     padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 2.5vw, 1.25rem)',
     borderRadius: '12px',
-    border: '1px solid rgba(2, 230, 115, 0.15)',
-    maxWidth: '85%',
+    border: '1px solid rgba(2, 230, 115, 0.25)',
+    maxWidth: '100%',
     wordWrap: 'break-word',
   },
 
@@ -393,7 +415,7 @@ const styles = {
   inputSection: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '1rem',
+    gap: '0.5rem',
     width: '100%',
     alignItems: 'center',
   },
@@ -407,39 +429,39 @@ const styles = {
   inputWrapper: {
     display: 'flex',
     alignItems: 'center',
-    gap: 'clamp(0.5rem, 2vw, 1rem)',
+    gap: 'clamp(0.4rem, 1.5vw, 0.75rem)',
     width: '100%',
-    maxWidth: '850px',
+    maxWidth: '750px',
     margin: '0 auto',
-    padding: 'clamp(0.75rem, 3vw, 1.25rem) clamp(1rem, 4vw, 1.5rem)',
-    backgroundColor: 'rgba(233, 234, 232, 0.08)',
-    border: '1px solid rgba(2, 230, 115, 0.25)',
-    borderRadius: 'clamp(20px, 5vw, 28px)',
+    padding: '1rem',
+    backgroundColor: '#000000',
+    border: '1px solid rgba(255, 255, 255, 0.15)',
+    borderRadius: 'clamp(14px, 3.5vw, 22px)',
     transition: 'all 0.3s ease',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 2px 12px rgba(0, 0, 0, 0.3)',
     boxSizing: 'border-box',
   },
 
   input: {
     flex: 1,
-    padding: '0.5rem',
+    padding: 'clamp(0.25rem, 1vw, 0.4rem)',
     backgroundColor: 'transparent',
     border: 'none',
-    color: '#E9EAE8',
-    fontSize: 'clamp(0.9rem, 2.5vw, 1.05rem)',
+    color: '#FFFFFF',
+    fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
     outline: 'none',
     fontFamily: 'Poppins, sans-serif',
     '::placeholder': {
-      color: 'rgba(233, 234, 232, 0.5)',
+      color: 'rgba(255, 255, 255, 0.5)',
     },
   },
 
   sendButton: {
-    padding: 'clamp(0.5rem, 2vw, 0.75rem)',
-    width: 'clamp(40px, 10vw, 48px)',
-    height: 'clamp(40px, 10vw, 48px)',
+    padding: 'clamp(0.4rem, 1.5vw, 0.6rem)',
+    width: 'clamp(36px, 8vw, 42px)',
+    height: 'clamp(36px, 8vw, 42px)',
     backgroundColor: '#02E673',
-    color: '#111111',
+    color: '#000000',
     border: 'none',
     borderRadius: '50%',
     cursor: 'pointer',
@@ -545,6 +567,149 @@ styleSheet.textContent = `
   button[style*="suggestionChip"]:hover {
     background-color: rgba(2, 230, 115, 0.1) !important;
     border-color: #02E673 !important;
+  }
+
+  /* Mobile responsive - under 768px */
+  @media (max-width: 768px) {
+    .chat-container {
+      padding: 0 1rem !important;
+    }
+
+    .chat-messages-area {
+      max-height: 350px !important;
+      height: auto !important;
+    }
+
+    .chat-input-wrapper {
+      max-width: 90% !important;
+      margin: 0 auto !important;
+      padding: 0.4rem 0.6rem !important;
+      gap: 0.35rem !important;
+      border-radius: 12px !important;
+    }
+
+    .chat-input {
+      font-size: 0.85rem !important;
+      padding: 0.25rem !important;
+    }
+
+    .chat-send-button {
+      width: 34px !important;
+      height: 34px !important;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+   .chat-messages-area {
+      max-height: 380px !important;
+      height: auto !important;
+    }
+  }
+  /* Small mobile - under 480px */
+  @media (max-width: 480px) {
+    .chat-container {
+      padding: 0 0.75rem !important;
+    }
+
+    .chat-messages-area {
+      max-height: 300px !important;
+      height: auto !important;
+      padding: 0.5rem !important;
+    }
+
+    /* Message bubbles - more compact */
+    div[style*="messagesContainer"] {
+      gap: 0.75rem !important;
+      padding: 0.25rem !important;
+    }
+
+    div[style*="messageRow"] {
+      gap: 0.5rem !important;
+    }
+
+    div[style*="avatarBot"], div[style*="avatarUser"] {
+      width: 28px !important;
+      height: 28px !important;
+      border-radius: 6px !important;
+    }
+
+    div[style*="messageText"] {
+      font-size: 0.85rem !important;
+      line-height: 1.5 !important;
+      padding: 0.5rem 0.75rem !important;
+      border-radius: 8px !important;
+    }
+
+    .chat-input-wrapper {
+      max-width: 95% !important;
+      margin: 0 auto !important;
+      padding: 0.35rem 0.5rem !important;
+      gap: 0.3rem !important;
+      border-radius: 10px !important;
+    }
+
+    .chat-input {
+      font-size: 0.8rem !important;
+      padding: 0.2rem !important;
+    }
+
+    .chat-send-button {
+      width: 32px !important;
+      height: 32px !important;
+    }
+  }
+
+  /* Very small mobile - under 360px */
+  @media (max-width: 360px) {
+    .chat-container {
+      padding: 0 0.6rem !important;
+    }
+
+    .chat-messages-area {
+      max-height: 250px !important;
+      height: auto !important;
+      padding: 0.4rem !important;
+    }
+
+    /* Message bubbles - extra compact */
+    div[style*="messagesContainer"] {
+      gap: 0.6rem !important;
+      padding: 0.2rem !important;
+    }
+
+    div[style*="messageRow"] {
+      gap: 0.4rem !important;
+    }
+
+    div[style*="avatarBot"], div[style*="avatarUser"] {
+      width: 24px !important;
+      height: 24px !important;
+      border-radius: 5px !important;
+    }
+
+    div[style*="messageText"] {
+      font-size: 0.8rem !important;
+      line-height: 1.4 !important;
+      padding: 0.4rem 0.6rem !important;
+      border-radius: 6px !important;
+    }
+
+    .chat-input-wrapper {
+      max-width: 95% !important;
+      margin: 0 auto !important;
+      padding: 0.3rem 0.45rem !important;
+      gap: 0.25rem !important;
+    }
+
+    .chat-input {
+      font-size: 0.75rem !important;
+      padding: 0.15rem !important;
+    }
+
+    .chat-send-button {
+      width: 30px !important;
+      height: 30px !important;
+    }
   }
 `;
 document.head.appendChild(styleSheet);
