@@ -3,7 +3,7 @@ const ServiceCard = ({ category, title, description, image }) => {
     <div style={styles.cardWrapper}>
       <div style={styles.card}>
         {/* Top Section - Text Content */}
-        <div style={styles.textSection}>
+        <div  style={styles.textSection}>
           <p style={styles.category}>{category}</p>
           <h2 style={styles.title}>{title}</h2>
           <p style={styles.description}>{description}</p>
@@ -38,6 +38,7 @@ const styles = {
     gap: 'clamp(0.75rem, 2vh, 1.25rem)',
     padding: 'clamp(2rem, 5vw, 3rem)',
     paddingBottom: 'clamp(1.5rem, 3vh, 2rem)',
+    height:'180px'
   },
   category: {
     fontSize: 'clamp(0.7rem, 1.5vw, 0.85rem)',
@@ -100,6 +101,7 @@ styleSheet.textContent = `
     div[style*="backgroundColor: rgb(17, 17, 17)"][style*="borderRadius"] {
       border-radius: 15px !important;
     }
+   
 
     /* Reduce text section padding on mobile */
     div[style*="gap: clamp"] {
