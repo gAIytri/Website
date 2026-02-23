@@ -282,7 +282,7 @@ const CenteredChat = () => {
                 className="chat-send-button"
                 style={{
                   ...styles.sendButton,
-                  opacity: !inputValue.trim() || isLoading ? 0.5 : 1,
+                  opacity: isLoading ? 0.5 : 1,
                   cursor: !inputValue.trim() || isLoading ? 'not-allowed' : 'pointer',
                 }}
                 disabled={!inputValue.trim() || isLoading}

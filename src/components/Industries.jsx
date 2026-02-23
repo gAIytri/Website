@@ -1,35 +1,40 @@
-import { FaShoppingCart, FaBullhorn, FaHospital, FaUniversity, FaTruck, FaCode } from 'react-icons/fa';
+import ecommerce from '../assets/ecommerce.jpg';
+import digitalMarketing from '../assets/digital-marketing.png';
+import healthcare from '../assets/healthcare.jpg';
+import financial from '../assets/financial.png';
+import logistics from '../assets/logistics.png';
+import saas from '../assets/saas.png';
 
 const industries = [
   {
     name: 'Retail & E-Commerce',
-    icon: FaShoppingCart,
-    description: 'Inventory AI, demand forecasting, customer journey automation',
+    image: ecommerce,
+    description: 'Inventory AI, demand forecasting, AI chatbots & voice agents for customer support',
   },
   {
     name: 'Marketing & Agencies',
-    icon: FaBullhorn,
-    description: 'Lead workflows, campaign analytics, proposal automation',
+    image: digitalMarketing,
+    description: 'Lead workflows, campaign analytics, interactive AI assistants for client engagement',
   },
   {
     name: 'Healthcare & Wellness',
-    icon: FaHospital,
-    description: 'Patient intake automation, knowledge assistants, compliance AI',
+    image: healthcare,
+    description: 'Patient intake chatbots, voice enabled health assistants, compliance AI',
   },
   {
     name: 'Finance & Professional Services',
-    icon: FaUniversity,
-    description: 'Report automation, contract AI, decision support dashboards',
+    image: financial,
+    description: 'Report automation, contract AI, interactive advisory copilots',
   },
   {
     name: 'Operations & Logistics',
-    icon: FaTruck,
-    description: 'Process automation, ERP integration, supply chain intelligence',
+    image: logistics,
+    description: 'Process automation, AI driven ERP copilots, real time supply chain assistants',
   },
   {
     name: 'SaaS & Technology',
-    icon: FaCode,
-    description: 'AI-powered features, internal copilots, data pipelines',
+    image: saas,
+    description: 'AI powered features, embedded chatbots & voice interfaces, internal copilots',
   },
 ];
 
@@ -39,26 +44,27 @@ const Industries = () => {
       <h2 style={styles.sectionHeader}>INDUSTRIES WE SERVE</h2>
       <p style={styles.tagline}>AI that fits your industry, not the other way around.</p>
       <div style={styles.grid} className="industries-grid">
-        {industries.map((industry) => {
-          const Icon = industry.icon;
-          return (
-            <div key={industry.name} style={styles.card} className="industry-card">
-              <div style={styles.iconContainer}>
-                <Icon style={styles.icon} />
-              </div>
+        {industries.map((industry) => (
+          <div key={industry.name} style={styles.card} className="industry-card">
+            <div style={styles.imageWrapper}>
+              <img src={industry.image} alt={industry.name} style={styles.image} />
+              <div style={styles.gradientOverlay} />
+            </div>
+            <div style={styles.cardContent}>
               <h3 style={styles.name}>{industry.name}</h3>
               <p style={styles.description}>{industry.description}</p>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
 
       <style>{`
         .industry-card {
-          transition: border-color 0.3s ease;
+          transition: border-color 0.3s ease, transform 0.3s ease;
         }
         .industry-card:hover {
           border-color: rgba(2, 230, 115, 0.2) !important;
+          transform: translateY(-4px);
         }
         @media (max-width: 1024px) {
           .industries-grid {
@@ -85,16 +91,17 @@ const styles = {
   },
   sectionHeader: {
     textAlign: 'center',
-    fontSize: 'clamp(0.75rem, 1.5vw, 0.85rem)',
-    fontWeight: 600,
+    fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)',
+    fontWeight: 700,
     letterSpacing: '3px',
     color: '#E9EAE8',
     marginBottom: '0.75rem',
+    textTransform: 'uppercase',
   },
   tagline: {
     textAlign: 'center',
-    fontSize: 'clamp(1.3rem, 3.5vw, 2.2rem)',
-    color: '#E9EAE8',
+    fontSize: 'clamp(0.95rem, 1.8vw, 1.15rem)',
+    color: 'rgba(233, 234, 232, 0.7)',
     margin: '0 0 clamp(2rem, 4vh, 3rem) 0',
     fontFamily: 'Poppins, sans-serif',
   },
@@ -109,21 +116,31 @@ const styles = {
     background: 'rgba(255, 255, 255, 0.03)',
     border: '1px solid rgba(255, 255, 255, 0.08)',
     borderRadius: '12px',
-    padding: 'clamp(1.5rem, 3vw, 2rem)',
+    overflow: 'hidden',
   },
-  iconContainer: {
-    width: '40px',
-    height: '40px',
-    borderRadius: '50%',
-    background: '#072D1F',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: '1rem',
+  imageWrapper: {
+    position: 'relative',
+    width: '100%',
+    aspectRatio: '16 / 9',
+    overflow: 'hidden',
   },
-  icon: {
-    fontSize: '18px',
-    color: '#02E673',
+  image: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    display: 'block',
+  },
+  gradientOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '40%',
+    background: 'linear-gradient(transparent 0%, rgba(0,0,0,0.5) 100%)',
+    pointerEvents: 'none',
+  },
+  cardContent: {
+    padding: 'clamp(1rem, 2vw, 1.5rem)',
   },
   name: {
     fontSize: 'clamp(0.95rem, 1.8vw, 1.1rem)',
