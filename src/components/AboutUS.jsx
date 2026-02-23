@@ -50,82 +50,112 @@ const AboutUsSection = () => {
   const founder = founders[index];
 
   return (
-    <section {...swipeHandlers} style={styles.container}>
-      {/* Left Arrow */}
-      <button
-        style={{
-          ...styles.arrowLeft,
-          ...(isMobile && { left: '0.3rem', fontSize: '1.2rem' }),
-        }}
-        onClick={() => handleChange('RIGHT')}
-      >
-        <FaChevronLeft />
-      </button>
+    <div style={styles.outerWrapper}>
+      {/* Part 1 — Vision / Mission */}
+      <div style={styles.visionSection}>
+        <p style={styles.sectionLabel}>ABOUT GAIYTRI</p>
+        <h2 style={styles.headline}>
+          Making ideas and emerging technologies accessible without the complexity.
+        </h2>
+        <p style={styles.subVision}>
+          AI should be a natural extension of how businesses think, operate, and scale.
+        </p>
+        <p style={styles.description}>
+          Gaiytri exists to help organizations through the next phase of AI adoption.
+          Applying intelligence where it has yet to reach, and strengthening it where it
+          already delivers value. We build integrated platforms that turn advanced technology
+          into everyday capability, enabling confident decisions, efficient workflows, and
+          long-term growth.
+        </p>
+        <p style={styles.tagline}>
+          We don't sell AI tools. We build Interactive{' '}
+          <span style={{ color: '#02E673', fontWeight: 700 }}>AI</span>{' '}
+          Systems that scale your business.
+        </p>
+      </div>
 
-      {/* Founder Slide */}
-      <div style={styles.slideWrapper}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, x: direction * 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -direction * 50 }}
-            transition={{ duration: 0.5, ease: 'easeInOut' }}
+      {/* Part 2 — Founders Carousel */}
+      <div style={styles.foundersWrapper}>
+        <p style={styles.teamLabel}>OUR TEAM</p>
+
+        <section {...swipeHandlers} style={styles.container}>
+          {/* Left Arrow */}
+          <button
             style={{
-              ...styles.slide,
-              flexDirection: isMobile ? 'column' : 'row',
-              textAlign: isMobile ? 'center' : 'left',
+              ...styles.arrowLeft,
+              ...(isMobile && { left: '0.3rem', fontSize: '1.2rem' }),
             }}
+            onClick={() => handleChange('RIGHT')}
           >
-            <img
-              src={founder.image}
-              alt={founder.name}
-              style={{
-                ...styles.image,
-                width: isMobile ? '160px' : '300px',
-                height: isMobile ? '160px' : '300px',
-              }}
-            />
+            <FaChevronLeft />
+          </button>
 
-            <div style={styles.textBlock}>
-              <h2 style={styles.name}>{founder.name}</h2>
+          {/* Founder Slide */}
+          <div style={styles.slideWrapper}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: direction * 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -direction * 50 }}
+                transition={{ duration: 0.5, ease: 'easeInOut' }}
+                style={{
+                  ...styles.slide,
+                  flexDirection: isMobile ? 'column' : 'row',
+                  textAlign: isMobile ? 'center' : 'left',
+                }}
+              >
+                <img
+                  src={founder.image}
+                  alt={founder.name}
+                  style={{
+                    ...styles.image,
+                    width: isMobile ? '160px' : '300px',
+                    height: isMobile ? '160px' : '300px',
+                  }}
+                />
 
-              {/* Show role & bio only if not mobile */}
-              {!isMobile && (
-                <>
-                  <h4 style={styles.role}>{founder.role}</h4>
-                  <p style={styles.bio}>{founder.bio}</p>
-                </>
-              )}
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+                <div style={styles.textBlock}>
+                  <h2 style={styles.name}>{founder.name}</h2>
 
-      {/* Right Arrow */}
-      <button
-        style={{
-          ...styles.arrowRight,
-          ...(isMobile && { right: '0.3rem', fontSize: '1.2rem' }),
-        }}
-        onClick={() => handleChange('LEFT')}
-      >
-        <FaChevronRight />
-      </button>
+                  {/* Show role & bio only if not mobile */}
+                  {!isMobile && (
+                    <>
+                      <h4 style={styles.role}>{founder.role}</h4>
+                      <p style={styles.bio}>{founder.bio}</p>
+                    </>
+                  )}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-      {/* Progress Dots */}
-      <div style={styles.progressWrapper}>
-        {founders.map((_, i) => (
-          <div
-            key={i}
+          {/* Right Arrow */}
+          <button
             style={{
-              ...styles.progressDot,
-              backgroundColor: i === index ? '#CCCCCC' : '#444',
+              ...styles.arrowRight,
+              ...(isMobile && { right: '0.3rem', fontSize: '1.2rem' }),
             }}
-          />
-        ))}
+            onClick={() => handleChange('LEFT')}
+          >
+            <FaChevronRight />
+          </button>
+
+          {/* Progress Dots */}
+          <div style={styles.progressWrapper}>
+            {founders.map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  ...styles.progressDot,
+                  backgroundColor: i === index ? '#CCCCCC' : '#444',
+                }}
+              />
+            ))}
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
   );
 };
 
@@ -133,14 +163,87 @@ export default AboutUsSection;
 
 // ---------- Styles ----------
 const styles = {
-  container: {
-    width: '80%',
-    minHeight: '400px',
-    maxHeight: '460px',
-      display: 'flex',
+  // Outer wrapper for both parts
+  outerWrapper: {
+    width: '100%',
+    display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: '2rem 1.5rem 1.2rem',
+    fontFamily: 'Poppins, sans-serif',
+  },
+
+  // Part 1 — Vision / Mission
+  visionSection: {
+    width: '100%',
+    maxWidth: '900px',
+    padding: 'clamp(4rem, 8vh, 6rem) clamp(1.5rem, 5vw, 3rem)',
+    textAlign: 'center',
+    color: '#E9EAE8',
+    fontFamily: 'Poppins, sans-serif',
+    boxSizing: 'border-box',
+  },
+  sectionLabel: {
+    fontSize: '0.85rem',
+    letterSpacing: '3px',
+    textTransform: 'uppercase',
+    opacity: 0.7,
+    marginBottom: '1.5rem',
+    fontWeight: 500,
+  },
+  headline: {
+    fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)',
+    fontWeight: 700,
+    lineHeight: 1.3,
+    margin: '0 0 1.2rem',
+  },
+  subVision: {
+    fontSize: 'clamp(1rem, 2vw, 1.2rem)',
+    opacity: 0.8,
+    lineHeight: 1.5,
+    margin: '0 0 1.5rem',
+    fontStyle: 'italic',
+  },
+  description: {
+    fontSize: 'clamp(0.95rem, 1.8vw, 1.1rem)',
+    opacity: 0.75,
+    lineHeight: 1.65,
+    margin: '0 0 2rem',
+  },
+  tagline: {
+    fontSize: 'clamp(1.05rem, 2vw, 1.25rem)',
+    fontWeight: 700,
+    lineHeight: 1.5,
+    margin: 0,
+  },
+
+  // Part 2 — Founders wrapper
+  foundersWrapper: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingBottom: '2rem',
+  },
+  teamLabel: {
+    fontSize: '0.85rem',
+    letterSpacing: '3px',
+    textTransform: 'uppercase',
+    color: '#E9EAE8',
+    opacity: 0.7,
+    fontWeight: 500,
+    marginBottom: '1.2rem',
+    fontFamily: 'Poppins, sans-serif',
+  },
+
+  // Existing founders card styles (kept intact)
+  container: {
+    width: 'min(80%, 1000px)',
+    minHeight: 'clamp(280px, 50vw, 400px)',
+    maxHeight: 'none',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: 'clamp(1.2rem, 3vw, 2rem) clamp(1rem, 3vw, 1.5rem) clamp(0.8rem, 2vw, 1.2rem)',
     boxSizing: 'border-box',
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.35)',
     position: 'relative',
@@ -160,10 +263,10 @@ const styles = {
   slide: {
     display: 'flex',
     alignItems: 'center',
-    gap: '2rem',
+    gap: 'clamp(1rem, 3vw, 2rem)',
     flexWrap: 'nowrap',
     maxWidth: '900px',
-    padding: '1rem 2rem',
+    padding: 'clamp(0.5rem, 2vw, 1rem) clamp(0.5rem, 2vw, 2rem)',
   },
   image: {
     borderRadius: '20%',
@@ -184,13 +287,12 @@ const styles = {
   },
   role: {
     fontSize: '1rem',
-    color: '#aaa',
-     color:'#072D1F',
-     opacity:0.7,
-     margin:0
+    color:'#072D1F',
+    opacity:0.7,
+    margin:0
   },
   bio: {
-    fontSize: '1.3rem',
+    fontSize: 'clamp(0.9rem, 2vw, 1.3rem)',
     opacity: 0.85,
     lineHeight: 1.45,
      color:'#072D1F',

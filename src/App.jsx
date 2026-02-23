@@ -1,13 +1,16 @@
-import React, { useRef, useState } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Home from './Home';
+import Home from './home';
+import TrustSecurity from './components/TrustSecurity';
+import { ToastProvider } from './components/ToastContainer';
 
 const styles = {
 appWrapper: {
   position: 'relative',
   minHeight: '100vh',
-  width: '100vw',
+  width: '100%',
   overflowX: 'hidden',
   fontFamily: 'Poppins, sans-serif',
 },
@@ -26,12 +29,12 @@ gradientOverlay: {
   backgroundColor: '#111111',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
-  zIndex: 0, // behind all content
+  zIndex: 0,
 },
 
 contentWrapper: {
   position: 'relative',
-  zIndex: 1, // above the background
+  zIndex: 1,
   display: 'flex',
   flexDirection: 'column',
   minHeight: '100vh',
@@ -45,29 +48,68 @@ mainContent: {
 };
 
 function App() {
-  const slidingRef = useRef(null);
-  const aboutRef = useRef(null);
+  const [sectionRefs, setSectionRefs] = useState(null);
+  const pendingScrollRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const scrollToSection = (ref) => {
-    if (ref?.current) {
-      ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // When sectionRefs become available after navigating back to /, handle pending scroll
+  useEffect(() => {
+    if (sectionRefs && pendingScrollRef.current) {
+      const refName = pendingScrollRef.current;
+      pendingScrollRef.current = null;
+      const ref = sectionRefs[refName];
+      if (ref && ref.current) {
+        setTimeout(() => {
+          const yOffset = -80;
+          const element = ref.current;
+          const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }, 50);
+      }
     }
-  };
+  }, [sectionRefs]);
+
+  const scrollToSection = useCallback((refName) => {
+    if (location.pathname !== '/') {
+      pendingScrollRef.current = refName;
+      navigate('/');
+      return;
+    }
+    const ref = sectionRefs?.[refName];
+    if (ref && ref.current) {
+      const yOffset = -80;
+      const element = ref.current;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }, [location.pathname, navigate, sectionRefs]);
 
   return (
-    <div style={styles.appWrapper}>
-      <div style={styles.gradientOverlay}></div>
-      <div style={styles.contentWrapper}>
-    <Navbar
-        onComingSoonClick={() => scrollToSection(slidingRef)}
-        onAboutUsClick={() => scrollToSection(aboutRef)}
-      />
-        <main style={styles.mainContent}>
-     <Home slidingRef={slidingRef} aboutRef={aboutRef} />
-        </main>
-        <Footer />
+    <ToastProvider>
+      <div style={styles.appWrapper}>
+        <div style={styles.gradientOverlay}></div>
+        <div style={styles.contentWrapper}>
+          <Navbar
+            onServicesClick={() => scrollToSection('servicesRef')}
+            onAboutClick={() => scrollToSection('aboutRef')}
+            onContactClick={() => {
+              console.log('Contact Us clicked');
+            }}
+          />
+          <main style={styles.mainContent}>
+            <Routes>
+              <Route path="/" element={<Home onRefsReady={setSectionRefs} />} />
+              <Route path="/trust" element={<TrustSecurity />} />
+            </Routes>
+          </main>
+          <Footer
+            onServicesClick={() => scrollToSection('servicesRef')}
+            onAboutClick={() => scrollToSection('aboutRef')}
+          />
+        </div>
       </div>
-    </div>
+    </ToastProvider>
   );
 }
 
