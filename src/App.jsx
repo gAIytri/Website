@@ -93,9 +93,7 @@ function App() {
           <Navbar
             onServicesClick={() => scrollToSection('servicesRef')}
             onAboutClick={() => scrollToSection('aboutRef')}
-            onContactClick={() => {
-              console.log('Contact Us clicked');
-            }}
+            onContactClick={() => scrollToSection('contactRef')}
           />
           <main style={styles.mainContent}>
             <Routes>

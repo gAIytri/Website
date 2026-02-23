@@ -52,26 +52,33 @@ const AboutUsSection = () => {
   return (
     <div style={styles.outerWrapper}>
       {/* Part 1 — Vision / Mission */}
-      <div style={styles.visionSection}>
-        <p style={styles.sectionLabel}>ABOUT GAIYTRI</p>
-        <h2 style={styles.headline}>
-          Making ideas and emerging technologies accessible without the complexity.
-        </h2>
-        <p style={styles.subVision}>
-          AI should be a natural extension of how businesses think, operate, and scale.
-        </p>
-        <p style={styles.description}>
-          Gaiytri exists to help organizations through the next phase of AI adoption.
-          Applying intelligence where it has yet to reach, and strengthening it where it
-          already delivers value. We build integrated platforms that turn advanced technology
-          into everyday capability, enabling confident decisions, efficient workflows, and
-          long-term growth.
-        </p>
-        <p style={styles.tagline}>
-          We don't sell AI tools. We build Interactive{' '}
-          <span style={{ color: '#02E673', fontWeight: 700 }}>AI</span>{' '}
-          Systems that scale your business.
-        </p>
+      <div className="vision-grid" style={styles.visionSection}>
+        {/* Left column */}
+        <div>
+          <p style={styles.sectionLabel}>ABOUT GAIYTRI</p>
+          <h2 style={styles.headline}>
+            Making ideas and emerging technologies accessible without the complexity.
+          </h2>
+        </div>
+        {/* Right column */}
+        <div>
+          <p style={styles.description}>
+            AI should function as a natural extension of how businesses think, operate, and
+            scale, not as a disconnected collection of tools. At Gaiytri, we guide organizations
+            into the next phase of AI adoption by building Interactive AI Systems that embed
+            intelligence directly into daily operations. We apply AI where it has yet to reach
+            and strengthen it where it already delivers value, creating integrated platforms that
+            transform advanced technology into practical, everyday capability. Our systems make
+            it simple for teams to clearly communicate objectives, tasks, and guardrails so
+            execution happens quickly and intelligently. The result is confident decision making,
+            streamlined workflows, and sustainable long term growth.
+          </p>
+          <p style={styles.tagline}>
+            We don't sell AI tools. We build Interactive{' '}
+            <span style={{ color: '#02E673', fontWeight: 700 }}>AI</span>{' '}
+            Systems that scale your business.
+          </p>
+        </div>
       </div>
 
       {/* Part 2 — Founders Carousel */}
@@ -148,13 +155,22 @@ const AboutUsSection = () => {
                 key={i}
                 style={{
                   ...styles.progressDot,
-                  backgroundColor: i === index ? '#CCCCCC' : '#444',
+                  backgroundColor: i === index ? '#02E673' : 'rgba(255, 255, 255, 0.3)',
                 }}
               />
             ))}
           </div>
         </section>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .vision-grid {
+            grid-template-columns: 1fr !important;
+            text-align: center !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };
@@ -175,44 +191,44 @@ const styles = {
   // Part 1 — Vision / Mission
   visionSection: {
     width: '100%',
-    maxWidth: '900px',
-    padding: 'clamp(4rem, 8vh, 6rem) clamp(1.5rem, 5vw, 3rem)',
-    textAlign: 'center',
+    maxWidth: '1600px',
+    padding: 'clamp(3rem, 6vh, 5rem) clamp(0.5rem, 1vw, 1rem)',
     color: '#E9EAE8',
     fontFamily: 'Poppins, sans-serif',
     boxSizing: 'border-box',
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: 'clamp(2rem, 4vw, 4rem)',
+    alignItems: 'start',
   },
   sectionLabel: {
-    fontSize: '0.85rem',
+    fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)',
     letterSpacing: '3px',
     textTransform: 'uppercase',
+    textAlign: 'left',
     opacity: 0.7,
-    marginBottom: '1.5rem',
-    fontWeight: 500,
+    marginBottom: '1rem',
+    fontWeight: 700,
   },
   headline: {
-    fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)',
+    fontSize: 'clamp(1.3rem, 2.8vw, 1.9rem)',
     fontWeight: 700,
     lineHeight: 1.3,
-    margin: '0 0 1.2rem',
-  },
-  subVision: {
-    fontSize: 'clamp(1rem, 2vw, 1.2rem)',
-    opacity: 0.8,
-    lineHeight: 1.5,
-    margin: '0 0 1.5rem',
-    fontStyle: 'italic',
+    textAlign: 'left',
+    margin: '0 0 1rem',
   },
   description: {
     fontSize: 'clamp(0.95rem, 1.8vw, 1.1rem)',
     opacity: 0.75,
     lineHeight: 1.65,
+    textAlign: 'left',
     margin: '0 0 2rem',
   },
   tagline: {
     fontSize: 'clamp(1.05rem, 2vw, 1.25rem)',
     fontWeight: 700,
     lineHeight: 1.5,
+    textAlign: 'left',
     margin: 0,
   },
 
@@ -237,19 +253,20 @@ const styles = {
 
   // Existing founders card styles (kept intact)
   container: {
-    width: 'min(80%, 1000px)',
+    width: 'min(90%, 1400px)',
     minHeight: 'clamp(280px, 50vw, 400px)',
     maxHeight: 'none',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: 'clamp(1.2rem, 3vw, 2rem) clamp(1rem, 3vw, 1.5rem) clamp(0.8rem, 2vw, 1.2rem)',
+    padding: 'clamp(1.2rem, 3vw, 2rem) clamp(3rem, 5vw, 4.5rem) clamp(0.8rem, 2vw, 1.2rem)',
     boxSizing: 'border-box',
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.35)',
     position: 'relative',
     overflow: 'hidden',
     borderRadius: '12px',
-    backgroundColor:'#E0E9CC',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    border: '1px solid rgba(255, 255, 255, 0.08)',
     justifyContent:'center'
   },
   slideWrapper: {
@@ -271,7 +288,7 @@ const styles = {
   image: {
     borderRadius: '20%',
     objectFit: 'cover',
-    border: '2px solid transparent',
+    border: '2px solid rgba(255, 255, 255, 0.1)',
   },
   textBlock: {
     flex: 1,
@@ -283,11 +300,11 @@ const styles = {
     fontSize: '1.4rem',
     fontWeight: '600',
    margin:0,
-    color:'#072D1F'
+    color: '#E9EAE8'
   },
   role: {
     fontSize: '1rem',
-    color:'#072D1F',
+    color: 'rgba(233, 234, 232, 0.7)',
     opacity:0.7,
     margin:0
   },
@@ -295,28 +312,28 @@ const styles = {
     fontSize: 'clamp(0.9rem, 2vw, 1.3rem)',
     opacity: 0.85,
     lineHeight: 1.45,
-     color:'#072D1F',
+     color: '#E9EAE8',
   },
   arrowLeft: {
     position: 'absolute',
-    left: '1rem',
+    left: 'clamp(0.3rem, 1vw, 0.8rem)',
     top: '50%',
     transform: 'translateY(-50%)',
     background: 'none',
     border: 'none',
-    color: '#111111',
+    color: '#E9EAE8',
     fontSize: '1.5rem',
     cursor: 'pointer',
     zIndex: 10,
   },
   arrowRight: {
     position: 'absolute',
-    right: '1rem',
+    right: 'clamp(0.3rem, 1vw, 0.8rem)',
     top: '50%',
     transform: 'translateY(-50%)',
     background: 'none',
     border: 'none',
-    color: '#111111',
+    color: '#E9EAE8',
     fontSize: '1.5rem',
     cursor: 'pointer',
     zIndex: 10,

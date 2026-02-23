@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react';
 import CenteredChat from './CenteredChat';
-import phaseTraditional from '../assets/phase-traditional.png';
-import phaseHybrid from '../assets/phase-hybrid.png';
-import phaseAI from '../assets/phase-ai.png';
 
 const heroStyleSheet = document.createElement('style');
 heroStyleSheet.textContent = `
@@ -36,12 +33,6 @@ if (!document.head.querySelector('style[data-hero-responsive]')) {
   heroStyleSheet.setAttribute('data-hero-responsive', 'true');
   document.head.appendChild(heroStyleSheet);
 }
-
-const phases = [
-  { image: phaseTraditional, label: 'Traditional', desc: 'Manual processes' },
-  { image: phaseHybrid, label: 'Hybrid', desc: 'Digital tools' },
-  { image: phaseAI, label: 'AI Powered', desc: 'Intelligent systems' },
-];
 
 const styles = {
   heroSection: {
@@ -115,51 +106,6 @@ const styles = {
     justifyContent: 'center',
     paddingTop: '1rem',
   },
-  // Progression row
-  progressionRow: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '0',
-    marginTop: 'clamp(0.75rem, 1.5vh, 1rem)',
-    padding: '0 clamp(0.5rem, 2vw, 1rem)',
-    flexWrap: 'wrap',
-    maxWidth: '100%',
-  },
-  phaseBlock: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '0.4rem',
-  },
-  phaseImgThumb: {
-    width: 'clamp(120px, 25vw, 400px)',
-    height: 'clamp(120px, 25vw, 400px)',
-    borderRadius: '10px',
-    objectFit: 'cover',
-    border: '1px solid rgba(255, 255, 255, 0.15)',
-  },
-  phaseLabel: {
-    fontSize: 'clamp(0.6rem, 1.2vw, 0.75rem)',
-    fontWeight: 600,
-    color: '#02E673',
-    fontFamily: 'Poppins, sans-serif',
-    textAlign: 'center',
-  },
-  phaseDesc: {
-    fontSize: 'clamp(0.5rem, 1vw, 0.65rem)',
-    color: 'rgba(233, 234, 232, 0.6)',
-    fontFamily: 'Poppins, sans-serif',
-    textAlign: 'center',
-  },
-  arrow: {
-    color: '#02E673',
-    fontSize: 'clamp(1.2rem, 2.5vw, 1.8rem)',
-    padding: '0 clamp(0.5rem, 1.5vw, 1rem)',
-    lineHeight: 1,
-    marginBottom: '1.5rem',
-    fontFamily: 'Poppins, sans-serif',
-  },
 };
 
 const Hero = () => {
@@ -207,24 +153,6 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* 3-Phase Progression: image → arrow → image → arrow → image */}
-        <div style={styles.progressionRow}>
-          {phases.map((phase, index) => (
-            <div key={phase.label} style={{ display: 'contents' }}>
-              {index > 0 && <span style={styles.arrow}>→</span>}
-              <div style={styles.phaseBlock}>
-                <img
-                  className="phase-img-thumb"
-                  src={phase.image}
-                  alt={phase.label}
-                  style={styles.phaseImgThumb}
-                />
-                <span style={styles.phaseLabel}>{phase.label}</span>
-                <span style={styles.phaseDesc}>{phase.desc}</span>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
