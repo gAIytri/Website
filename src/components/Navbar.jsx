@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logoWordmark.svg';
 
 // Add responsive navbar styles
@@ -155,10 +156,11 @@ const styles = {
     backgroundColor: 'rgba(2, 230, 115, 0.1)',
   },
 };
-const Navbar = ({ onProductsClick, onServicesClick, onContactClick }) => {
+const Navbar = ({ onServicesClick, onAboutClick, onContactClick }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 510px)' });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -173,7 +175,9 @@ const Navbar = ({ onProductsClick, onServicesClick, onContactClick }) => {
     <nav className="responsive-navbar" style={styles.navbar}>
       {/* Left: Logo and Name */}
       <div style={styles.logoContainer}>
-        <img src={logo} alt="Gaiytri Logo" style={styles.logoImage} />
+        <a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', cursor: 'pointer' }}>
+          <img src={logo} alt="Gaiytri Logo" style={styles.logoImage} />
+        </a>
       </div>
 
       {/* Center: Products and Services (Desktop only) */}
@@ -192,20 +196,20 @@ const Navbar = ({ onProductsClick, onServicesClick, onContactClick }) => {
               style={styles.link}
               onClick={(e) => {
                 e.preventDefault();
-                onProductsClick?.();
+                onServicesClick?.();
               }}
             >
-              Products
+              Services
             </a>
             <a
               href="#"
               style={styles.link}
               onClick={(e) => {
                 e.preventDefault();
-                onServicesClick?.();
+                onAboutClick?.();
               }}
             >
-              Services
+              About
             </a>
           </motion.div>
         )}
@@ -266,21 +270,6 @@ const Navbar = ({ onProductsClick, onServicesClick, onContactClick }) => {
                       href="#"
                       style={{
                         ...styles.dropdownItem,
-                        ...(hoveredItem === 'products' ? styles.dropdownItemHover : {}),
-                      }}
-                      onMouseEnter={() => setHoveredItem('products')}
-                      onMouseLeave={() => setHoveredItem(null)}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleMenuItemClick(onProductsClick);
-                      }}
-                    >
-                      Products
-                    </a>
-                    <a
-                      href="#"
-                      style={{
-                        ...styles.dropdownItem,
                         ...(hoveredItem === 'services' ? styles.dropdownItemHover : {}),
                       }}
                       onMouseEnter={() => setHoveredItem('services')}
@@ -291,6 +280,21 @@ const Navbar = ({ onProductsClick, onServicesClick, onContactClick }) => {
                       }}
                     >
                       Services
+                    </a>
+                    <a
+                      href="#"
+                      style={{
+                        ...styles.dropdownItem,
+                        ...(hoveredItem === 'about' ? styles.dropdownItemHover : {}),
+                      }}
+                      onMouseEnter={() => setHoveredItem('about')}
+                      onMouseLeave={() => setHoveredItem(null)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleMenuItemClick(onAboutClick);
+                      }}
+                    >
+                      About
                     </a>
                     <a
                       href="#"

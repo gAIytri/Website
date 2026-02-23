@@ -9,6 +9,7 @@ const CenteredChat = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isChatExpanded, setIsChatExpanded] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const chatAreaRef = useRef(null);
@@ -45,6 +46,7 @@ const CenteredChat = () => {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    setIsChatExpanded(true);
     const question = inputValue; // Store before clearing
     setInputValue('');
     setIsLoading(true);
@@ -154,9 +156,38 @@ const CenteredChat = () => {
     }
   };
 
+  const isExpanded = isChatExpanded && messages.length > 0;
+
+  const handleCloseChat = () => {
+    setIsChatExpanded(false);
+  };
+
   return (
-    <div style={styles.container} className="chat-container">
-      <div style={styles.chatWrapper}>
+    <div style={{
+      ...styles.container,
+      padding: isExpanded ? '0 clamp(1.5rem, 4vw, 4rem)' : '0 clamp(0.75rem, 2vw, 1.5rem)',
+    }} className="chat-container">
+      <div style={{
+        ...styles.chatWrapper,
+        maxWidth: isExpanded ? '100%' : '850px',
+        transition: 'max-width 0.3s ease',
+        position: 'relative',
+      }}>
+
+        {/* Close Button - outside chat area, top-right of wrapper */}
+        {isExpanded && (
+          <button
+            onClick={handleCloseChat}
+            style={styles.closeButton}
+            className="chat-close-button"
+            title="Close chat"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#02E673" strokeWidth="3" strokeLinecap="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        )}
 
         {/* Dynamic Height Chat Area */}
         <div
@@ -167,7 +198,7 @@ const CenteredChat = () => {
             maxHeight: '400px',
             height: 'auto',
             padding: '1rem',
-            display: messages.length === 0 ? 'none' : 'flex',
+            display: isExpanded ? 'flex' : 'none',
           }}
         >
           {/* Messages Container */}
@@ -277,6 +308,7 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'flex-start',
     padding: '0 clamp(0.75rem, 2vw, 1.5rem)',
+    boxSizing: 'border-box',
   },
 
   chatWrapper: {
@@ -297,6 +329,25 @@ const styles = {
     transition: 'all 0.3s ease',
     backgroundColor:'rgba(0,0,0,0.8)',
     borderRadius:'10px'
+  },
+
+  closeButton: {
+    position: 'absolute',
+    top: '0.4rem',
+    right: '0.4rem',
+    width: '28px',
+    height: '28px',
+    borderRadius: '50%',
+    border: 'none',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    color: '#02E673',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'all 0.2s ease',
+    zIndex: 20,
+    padding: 0,
   },
 
   // Welcome Section
@@ -431,7 +482,7 @@ const styles = {
     alignItems: 'center',
     gap: 'clamp(0.4rem, 1.5vw, 0.75rem)',
     width: '100%',
-    maxWidth: '750px',
+    maxWidth: '100%',
     margin: '0 auto',
     padding: '1rem',
     backgroundColor: '#000000',
@@ -485,7 +536,7 @@ const styles = {
     alignItems: 'center',
     gap: '0.75rem',
     width: '100%',
-    maxWidth: '850px',
+    maxWidth: '100%',
     marginTop: '1rem',
   },
 
@@ -557,6 +608,13 @@ styleSheet.textContent = `
     background: rgba(2, 230, 115, 0.5);
   }
 
+  /* Close button hover */
+  .chat-close-button:hover {
+    color: #02E673 !important;
+    transform: scale(1.15);
+    opacity: 0.9;
+  }
+
   /* Input focus effect */
   div[style*="inputWrapper"]:focus-within {
     border-color: #02E673 !important;
@@ -581,7 +639,7 @@ styleSheet.textContent = `
     }
 
     .chat-input-wrapper {
-      max-width: 90% !important;
+      max-width: 100% !important;
       margin: 0 auto !important;
       padding: 0.4rem 0.6rem !important;
       gap: 0.35rem !important;
@@ -641,7 +699,7 @@ styleSheet.textContent = `
     }
 
     .chat-input-wrapper {
-      max-width: 95% !important;
+      max-width: 100% !important;
       margin: 0 auto !important;
       padding: 0.35rem 0.5rem !important;
       gap: 0.3rem !important;
@@ -695,7 +753,7 @@ styleSheet.textContent = `
     }
 
     .chat-input-wrapper {
-      max-width: 95% !important;
+      max-width: 100% !important;
       margin: 0 auto !important;
       padding: 0.3rem 0.45rem !important;
       gap: 0.25rem !important;

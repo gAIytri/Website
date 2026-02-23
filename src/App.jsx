@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './home';
+import TrustSecurity from './components/TrustSecurity';
 import { ToastProvider } from './components/ToastContainer';
 
 const styles = {
 appWrapper: {
   position: 'relative',
   minHeight: '100vh',
-  width: '100vw',
+  width: '100%',
   overflowX: 'hidden',
   fontFamily: 'Poppins, sans-serif',
 },
@@ -27,12 +29,12 @@ gradientOverlay: {
   backgroundColor: '#111111',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
-  zIndex: 0, // behind all content
+  zIndex: 0,
 },
 
 contentWrapper: {
   position: 'relative',
-  zIndex: 1, // above the background
+  zIndex: 1,
   display: 'flex',
   flexDirection: 'column',
   minHeight: '100vh',
@@ -47,20 +49,41 @@ mainContent: {
 
 function App() {
   const [sectionRefs, setSectionRefs] = useState(null);
+  const pendingScrollRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const scrollToSection = (ref) => {
-    console.log('scrollToSection called', ref);
+  // When sectionRefs become available after navigating back to /, handle pending scroll
+  useEffect(() => {
+    if (sectionRefs && pendingScrollRef.current) {
+      const refName = pendingScrollRef.current;
+      pendingScrollRef.current = null;
+      const ref = sectionRefs[refName];
+      if (ref && ref.current) {
+        setTimeout(() => {
+          const yOffset = -80;
+          const element = ref.current;
+          const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }, 50);
+      }
+    }
+  }, [sectionRefs]);
+
+  const scrollToSection = useCallback((refName) => {
+    if (location.pathname !== '/') {
+      pendingScrollRef.current = refName;
+      navigate('/');
+      return;
+    }
+    const ref = sectionRefs?.[refName];
     if (ref && ref.current) {
-      console.log('Ref exists, scrolling to:', ref.current);
-      const yOffset = -80; // Offset for navbar height
+      const yOffset = -80;
       const element = ref.current;
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-
       window.scrollTo({ top: y, behavior: 'smooth' });
-    } else {
-      console.log('Ref not found or not ready');
     }
-  };
+  }, [location.pathname, navigate, sectionRefs]);
 
   return (
     <ToastProvider>
@@ -68,37 +91,21 @@ function App() {
         <div style={styles.gradientOverlay}></div>
         <div style={styles.contentWrapper}>
           <Navbar
-            onProductsClick={() => {
-              if (sectionRefs?.productsRef) {
-                scrollToSection(sectionRefs.productsRef);
-              }
-            }}
-            onServicesClick={() => {
-              if (sectionRefs?.servicesRef) {
-                scrollToSection(sectionRefs.servicesRef);
-              }
-            }}
+            onServicesClick={() => scrollToSection('servicesRef')}
+            onAboutClick={() => scrollToSection('aboutRef')}
             onContactClick={() => {
-              // TODO: Navigate to Contact page
               console.log('Contact Us clicked');
             }}
           />
           <main style={styles.mainContent}>
-            <Home onRefsReady={setSectionRefs} />
+            <Routes>
+              <Route path="/" element={<Home onRefsReady={setSectionRefs} />} />
+              <Route path="/trust" element={<TrustSecurity />} />
+            </Routes>
           </main>
           <Footer
-            onProductsClick={() => {
-              console.log('Footer Products clicked', sectionRefs);
-              if (sectionRefs?.productsRef) {
-                scrollToSection(sectionRefs.productsRef);
-              }
-            }}
-            onServicesClick={() => {
-              console.log('Footer Services clicked', sectionRefs);
-              if (sectionRefs?.servicesRef) {
-                scrollToSection(sectionRefs.servicesRef);
-              }
-            }}
+            onServicesClick={() => scrollToSection('servicesRef')}
+            onAboutClick={() => scrollToSection('aboutRef')}
           />
         </div>
       </div>

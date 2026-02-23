@@ -258,7 +258,7 @@ const styles = {
   },
   leftText: {
     flex: '1',
-    minWidth: '250px',
+    minWidth: 'min(250px, 100%)',
     paddingTop: '2rem',
     width: 'auto',
   },
@@ -270,10 +270,11 @@ const styles = {
   },
   formBox: {
     flex: '1.5',
-    minWidth: '300px',
+    minWidth: 'min(300px, 100%)',
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
     padding: 'clamp(1.5rem, 4vw, 2.5rem)',
     borderRadius: '8px',
+    boxSizing: 'border-box',
   },
   form: {
     display: 'flex',
@@ -287,7 +288,7 @@ const styles = {
   },
   input: {
     flex: 1,
-    minWidth: '200px',
+    minWidth: 'min(200px, 100%)',
     padding: '0.9rem 1rem',
     borderRadius: '4px',
     border: 'none',
