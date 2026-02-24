@@ -12,7 +12,7 @@ const industries = [
     description: 'Inventory AI, demand forecasting, AI chatbots & voice agents for customer support',
   },
   {
-    name: 'Marketing & Agencies',
+    name: 'Marketing Agencies',
     image: digitalMarketing,
     description: 'Lead workflows, campaign analytics, interactive AI assistants for client engagement',
   },
