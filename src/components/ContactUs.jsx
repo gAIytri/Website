@@ -117,6 +117,7 @@ const ContactUsForm = () => {
                 WebkitAppearance: 'none',
                 MozAppearance: 'none',
                 cursor: 'pointer',
+                color: formData.industry ? '#000000' : '#666',
               }}
             >
               <option value="" disabled hidden>

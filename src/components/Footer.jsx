@@ -7,12 +7,13 @@ const Footer = ({ onServicesClick, onAboutClick }) => {
     <footer style={styles.footer}>
       {/* Scroll to Top */}
       <button
+        className="scroll-top-btn"
         style={styles.scrollTopButton}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         aria-label="Scroll to top"
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#02E673" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="12" y1="19" x2="12" y2="5" />
+        <svg width="32" height="42" viewBox="0 0 24 30" fill="none" stroke="#000000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="12" y1="28" x2="12" y2="5" />
           <polyline points="5 12 12 5 19 12" />
         </svg>
       </button>
@@ -83,6 +84,20 @@ const Footer = ({ onServicesClick, onAboutClick }) => {
             footer > div:first-child {
               grid-template-columns: 1fr 1fr !important;
             }
+          }
+
+          @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+          }
+
+          .scroll-top-btn {
+            animation: float 2.5s ease-in-out infinite;
+          }
+
+          .scroll-top-btn:hover {
+            animation-play-state: paused;
+            transform: translateY(-4px);
           }
 
           @media (max-width: 480px) {
@@ -208,11 +223,11 @@ const styles = {
   scrollTopButton: {
     position: 'absolute',
     top: 'clamp(3rem, 6vh, 5rem)',
-    right: 'clamp(5rem, 14vw, 12rem)',
+    right: 'clamp(8rem, 16vw, 14rem)',
     background: 'transparent',
-    border: '2px solid #02E673',
-    width: '44px',
-    height: '44px',
+    border: '2px solid #000000',
+    width: '56px',
+    height: '56px',
     aspectRatio: '1',
     borderRadius: '50%',
     display: 'flex',
