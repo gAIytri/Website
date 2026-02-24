@@ -10,13 +10,13 @@ const founders = [
   {
     name: 'Sidharth Raj Khandelwal',
     role: 'Co-Founder & CTO',
-    bio: 'Sidharth leads the technology vision and system architecture at Gaiytri, designing the core infrastructure behind every Interactive AI System we build. He architects modular, production grade platforms that integrate reasoning engines, automation frameworks, and structured data layers into business operations. By translating complex technical challenges into cohesive, execution ready systems, he ensures Gaiytri\'s Interactive AI systems operates with precision and reliability, providing the structural foundation to support sustained organizational growth and long term adaptability.',
+    bio: 'Sidharth leads the technology vision and system architecture at Gaiytri, designing the core infrastructure behind every Interactive AI System we build. He architects modular platforms that integrate reasoning engines, automation frameworks, and structured data layers into business operations. By translating complex challenges into execution ready systems, he ensures precision, reliability, and long term adaptability.',
     image: founder1,
   },
   {
     name: 'Jemin Patel',
     role: 'Co-Founder & COO',
-    bio: 'Jemin leads the business strategy and operational direction at Gaiytri, driving growth, marketing, and company wide execution. He builds structured frameworks that align long term vision, revenue strategy, and day to day operations into a unified growth engine. From go to market initiatives and strategic partnerships to organizational planning and performance oversight, he ensures every Interactive AI System we develop is positioned clearly, adopted effectively, and delivers measurable and lasting business impact across every engagement.',
+    bio: 'Jemin leads the business strategy and operational direction at Gaiytri, driving growth and company wide execution. He builds structured frameworks that align vision, revenue strategy, and daily operations into a unified growth engine. By connecting strategy to market execution, he ensures every Interactive AI System delivers measurable and lasting business impact.',
     image: founder2,
   },
 ];

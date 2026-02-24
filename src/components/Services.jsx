@@ -61,8 +61,8 @@ const Services = () => {
   const nextIndex = wrap(activeIndex + 1);
 
   const getSlideStyle = (position) => {
-    const activeWidth = isMobile ? '85%' : isTablet ? '75%' : '70%';
-    const sideOffset = isMobile ? '97%' : isTablet ? '92%' : '90%';
+    const activeWidth = isMobile ? '85%' : isTablet ? '70%' : '63%';
+    const sideOffset = isMobile ? '98%' : isTablet ? '97%' : '96%';
 
     const base = {
       position: 'absolute',
@@ -202,7 +202,8 @@ const styles = {
   },
   textContent: {
     flex: 1,
-    padding: 'clamp(1.5rem, 3vw, 2.5rem)',
+    padding: 'clamp(1.5rem, 3vw, 3rem)',
+    paddingRight: 'clamp(1rem, 2vw, 2rem)',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -222,13 +223,13 @@ const styles = {
     margin: 0,
   },
   imageArea: {
-    width: '45%',
-    maxWidth: '45%',
+    width: '40%',
+    maxWidth: '40%',
     flexShrink: 0,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 'clamp(0.8rem, 1.5vw, 1.2rem)',
+    padding: 'clamp(1.2rem, 2.5vw, 2rem)',
     overflow: 'hidden',
   },
   image: {
