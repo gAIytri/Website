@@ -76,6 +76,7 @@ const styles = {
     color: '#E9EAE8',
     margin: 0,
     lineHeight: '1',
+    gap: 'clamp(0.5rem, 1.5vw, 1rem)',
   },
   rotatingWordContainer: {
     display: 'inline-block',
@@ -97,7 +98,7 @@ const styles = {
     lineHeight: '1.6',
     maxWidth: '750px',
     margin: '0 auto',
-    marginTop: 'clamp(0.5rem, 1.5vh, 1rem)',
+    marginTop: 'clamp(1.2rem, 3vh, 2rem)',
   },
   chatSection: {
     paddingBottom: '1rem',

@@ -1,9 +1,9 @@
-import ecommerce from '../assets/ecommerce.jpg';
-import digitalMarketing from '../assets/digital-marketing.png';
-import healthcare from '../assets/healthcare.jpg';
-import financial from '../assets/financial.png';
-import logistics from '../assets/logistics.png';
-import saas from '../assets/saas.png';
+import ecommerce from '../assets/ecommerce-green.png';
+import digitalMarketing from '../assets/digital-marketing-green.png';
+import healthcare from '../assets/healthcare-green.png';
+import financial from '../assets/financial-green.png';
+import logistics from '../assets/logistics-green.png';
+import saas from '../assets/saas-green.png';
 
 const industries = [
   {

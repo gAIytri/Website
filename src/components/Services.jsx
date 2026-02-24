@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
-import aiWorkflows from '../assets/ai-workflows.png';
-import dataAnalytics from '../assets/data-analytics.jpg';
-import customAI from '../assets/custom-ai.png';
+import aiWorkflows from '../assets/ai-workflows-green.png';
+import dataAnalytics from '../assets/data-analytics-green.png';
+import customAI from '../assets/custom-ai-green.png';
 
 const pillars = [
   {
@@ -26,13 +26,10 @@ const pillars = [
   },
 ];
 
-const SWIPE_THRESHOLD = 50;
-
 const Services = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
-  const dragRef = useRef({ startX: 0, isDragging: false, didSwipe: false });
 
   useEffect(() => {
     const handleResize = () => {
@@ -44,110 +41,102 @@ const Services = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const wrap = (i) => ((i % pillars.length) + pillars.length) % pillars.length;
+
   const goNext = useCallback(() => {
-    setActiveIndex((prev) => Math.min(prev + 1, pillars.length - 1));
+    setActiveIndex((prev) => wrap(prev + 1));
   }, []);
 
   const goPrev = useCallback(() => {
-    setActiveIndex((prev) => Math.max(prev - 1, 0));
+    setActiveIndex((prev) => wrap(prev - 1));
   }, []);
 
-  // Touch swipe support
   const swipeHandlers = useSwipeable({
     onSwipedLeft: goNext,
     onSwipedRight: goPrev,
-    trackMouse: false,
-    preventScrollOnSwipe: true,
+    trackMouse: true,
   });
 
-  // Mouse drag support
-  const handleMouseDown = useCallback((e) => {
-    dragRef.current = { startX: e.clientX, isDragging: true, didSwipe: false };
-  }, []);
+  const prevIndex = wrap(activeIndex - 1);
+  const nextIndex = wrap(activeIndex + 1);
 
-  const handleMouseMove = useCallback((e) => {
-    if (!dragRef.current.isDragging) return;
-    const diff = e.clientX - dragRef.current.startX;
-    if (Math.abs(diff) > SWIPE_THRESHOLD && !dragRef.current.didSwipe) {
-      dragRef.current.didSwipe = true;
-      if (diff < 0) goNext();
-      else goPrev();
+  const getSlideStyle = (position) => {
+    const activeWidth = isMobile ? '85%' : isTablet ? '75%' : '70%';
+    const sideOffset = isMobile ? '97%' : isTablet ? '92%' : '90%';
+
+    const base = {
+      position: 'absolute',
+      top: 0,
+      left: '50%',
+      width: activeWidth,
+      height: '100%',
+      transition: 'all 0.5s ease',
+      borderRadius: '16px',
+      overflow: 'hidden',
+    };
+
+    if (position === 'active') {
+      return {
+        ...base,
+        transform: 'translateX(-50%) scale(1)',
+        opacity: 1,
+        zIndex: 2,
+      };
     }
-  }, [goNext, goPrev]);
+    if (position === 'prev') {
+      return {
+        ...base,
+        transform: `translateX(calc(-50% - ${sideOffset})) scale(0.85)`,
+        opacity: 0.5,
+        zIndex: 1,
+        cursor: 'pointer',
+      };
+    }
+    return {
+      ...base,
+      transform: `translateX(calc(-50% + ${sideOffset})) scale(0.85)`,
+      opacity: 0.5,
+      zIndex: 1,
+      cursor: 'pointer',
+    };
+  };
 
-  const handleMouseUp = useCallback(() => {
-    dragRef.current.isDragging = false;
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    dragRef.current.isDragging = false;
-  }, []);
-
-  const slideWidth = isMobile ? 85 : isTablet ? 75 : 70;
-  const peekWidth = (100 - slideWidth) / 2;
-  const trackTranslateX = -(activeIndex * slideWidth) + peekWidth;
+  const renderSlide = (pillar, position) => (
+    <div
+      key={`${position}-${pillar.title}`}
+      style={getSlideStyle(position)}
+      onClick={position === 'prev' ? goPrev : position === 'next' ? goNext : undefined}
+    >
+      <div className="services-card" style={styles.card}>
+        <div style={styles.textContent}>
+          <h3 style={styles.cardTitle}>{pillar.title}</h3>
+          <p style={styles.description}>{pillar.description}</p>
+        </div>
+        <div style={styles.imageArea}>
+          <img
+            src={pillar.image}
+            alt={pillar.title}
+            style={styles.image}
+            draggable={false}
+          />
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <section style={styles.section}>
       <h2 style={styles.sectionHeader}>PRODUCTS & SERVICES</h2>
 
-      {/* Carousel */}
-      <div
-        {...swipeHandlers}
-        style={styles.carouselContainer}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseLeave}
-      >
-        <div
-          style={{
-            ...styles.track,
-            transform: `translateX(${trackTranslateX}%)`,
-          }}
-        >
-          {pillars.map((pillar, i) => {
-            const isActive = i === activeIndex;
-            return (
-              <div
-                key={pillar.title}
-                style={{
-                  ...styles.slide,
-                  width: `${slideWidth}%`,
-                  flexShrink: 0,
-                  opacity: isActive ? 1 : 0.5,
-                  transform: isActive ? 'scale(1)' : 'scale(0.85)',
-                  cursor: isActive ? 'grab' : 'pointer',
-                }}
-                onClick={() => {
-                  if (dragRef.current.didSwipe) return;
-                  if (i < activeIndex) goPrev();
-                  else if (i > activeIndex) goNext();
-                }}
-              >
-                <div className="services-card" style={styles.card}>
-                  {/* Text content — top left */}
-                  <div style={styles.textContent}>
-                    <h3 style={styles.cardTitle}>{pillar.title}</h3>
-                    <p style={styles.description}>{pillar.description}</p>
-                  </div>
-                  {/* Image — bottom right */}
-                  <div style={styles.imageArea}>
-                    <img
-                      src={pillar.image}
-                      alt={pillar.title}
-                      style={styles.image}
-                      draggable={false}
-                    />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+      <div {...swipeHandlers} style={styles.carouselContainer}>
+        <div style={styles.carouselTrack}>
+          {renderSlide(pillars[prevIndex], 'prev')}
+          {renderSlide(pillars[activeIndex], 'active')}
+          {renderSlide(pillars[nextIndex], 'next')}
         </div>
+
       </div>
 
-      {/* Dot indicators */}
       <div style={styles.dotsWrapper}>
         {pillars.map((_, i) => (
           <div
@@ -195,25 +184,21 @@ const styles = {
     position: 'relative',
     width: '100%',
     overflow: 'hidden',
-    userSelect: 'none',
   },
-  track: {
-    display: 'flex',
-    transition: 'transform 0.5s ease',
-  },
-  slide: {
-    transition: 'all 0.5s ease',
-    padding: '0 clamp(4px, 0.5vw, 8px)',
-    boxSizing: 'border-box',
+  carouselTrack: {
+    position: 'relative',
+    width: '100%',
+    minHeight: 'clamp(280px, 35vw, 400px)',
   },
   card: {
     display: 'flex',
     alignItems: 'stretch',
-    background: 'rgba(255, 255, 255, 0.04)',
+    background: 'rgba(17, 17, 17, 0.85)',
     border: '1px solid rgba(255, 255, 255, 0.1)',
     borderRadius: '16px',
     overflow: 'hidden',
-    minHeight: 'clamp(280px, 35vw, 400px)',
+    height: '100%',
+    boxSizing: 'border-box',
   },
   textContent: {
     flex: 1,
@@ -240,18 +225,18 @@ const styles = {
     width: '45%',
     maxWidth: '45%',
     flexShrink: 0,
-    alignSelf: 'flex-end',
     display: 'flex',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 'clamp(0.8rem, 1.5vw, 1.2rem)',
     overflow: 'hidden',
   },
   image: {
     width: '100%',
-    height: '100%',
-    objectFit: 'cover',
+    maxHeight: '100%',
+    objectFit: 'contain',
     display: 'block',
-    borderRadius: '12px 0 0 0',
+    borderRadius: '12px',
     userSelect: 'none',
     pointerEvents: 'none',
   },

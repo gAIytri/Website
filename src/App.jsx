@@ -62,9 +62,10 @@ function App() {
       const ref = sectionRefs[refName];
       if (ref && ref.current) {
         setTimeout(() => {
-          const yOffset = -80;
+          const navbar = document.querySelector('.responsive-navbar');
+          const navHeight = navbar ? navbar.getBoundingClientRect().height : 60;
           const element = ref.current;
-          const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          const y = element.getBoundingClientRect().top + window.pageYOffset - navHeight - 16;
           window.scrollTo({ top: y, behavior: 'smooth' });
         }, 50);
       }
@@ -79,9 +80,10 @@ function App() {
     }
     const ref = sectionRefs?.[refName];
     if (ref && ref.current) {
-      const yOffset = -80;
+      const navbar = document.querySelector('.responsive-navbar');
+      const navHeight = navbar ? navbar.getBoundingClientRect().height : 60;
       const element = ref.current;
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      const y = element.getBoundingClientRect().top + window.pageYOffset - navHeight - 16;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
   }, [location.pathname, navigate, sectionRefs]);

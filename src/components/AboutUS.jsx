@@ -10,13 +10,13 @@ const founders = [
   {
     name: 'Sidharth Raj Khandelwal',
     role: 'Co-Founder & CTO',
-    bio: 'Sidharth leads all things tech at Gaiytri, architecting scalable AI-first platforms and developing intelligent tools that empower businesses. With expertise in full-stack development, automation, and user experience, he brings product ideas to life with code and vision.',
+    bio: 'Sidharth leads the technology vision and system architecture at Gaiytri, designing the core infrastructure behind every Interactive AI System we build. He architects modular, production grade platforms that integrate reasoning engines, automation frameworks, and structured data layers into business operations. By translating complex technical challenges into cohesive, execution ready systems, he ensures Gaiytri\'s Interactive AI systems operates with precision and reliability, providing the structural foundation to support sustained organizational growth and long term adaptability.',
     image: founder1,
   },
   {
     name: 'Jemin Patel',
     role: 'Co-Founder & COO',
-    bio: 'Jemin crafts the business and brand strategy at Gaiytri. With a deep focus on operations, partnerships, and customer success, he ensures our AI-driven tools deliver real-world value and help organizations transform ideas into scalable outcomes.',
+    bio: 'Jemin leads the business strategy and operational direction at Gaiytri, driving growth, marketing, and company wide execution. He builds structured frameworks that align long term vision, revenue strategy, and day to day operations into a unified growth engine. From go to market initiatives and strategic partnerships to organizational planning and performance oversight, he ensures every Interactive AI System we develop is positioned clearly, adopted effectively, and delivers measurable and lasting business impact across every engagement.',
     image: founder2,
   },
 ];
@@ -81,86 +81,64 @@ const AboutUsSection = () => {
         </div>
       </div>
 
-      {/* Part 2 — Founders Carousel */}
+      {/* Part 2 — Founders */}
       <div style={styles.foundersWrapper}>
-        <p style={styles.teamLabel}>OUR TEAM</p>
+        <h2 style={styles.teamLabel}>OUR TEAM</h2>
 
-        <section {...swipeHandlers} style={styles.container}>
-          {/* Left Arrow */}
-          <button
-            style={{
-              ...styles.arrowLeft,
-              ...(isMobile && { left: '0.3rem', fontSize: '1.2rem' }),
-            }}
-            onClick={() => handleChange('RIGHT')}
-          >
-            <FaChevronLeft />
-          </button>
-
-          {/* Founder Slide */}
-          <div style={styles.slideWrapper}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: direction * 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -direction * 50 }}
-                transition={{ duration: 0.5, ease: 'easeInOut' }}
-                style={{
-                  ...styles.slide,
-                  flexDirection: isMobile ? 'column' : 'row',
-                  textAlign: isMobile ? 'center' : 'left',
-                }}
-              >
-                <img
-                  src={founder.image}
-                  alt={founder.name}
-                  style={{
-                    ...styles.image,
-                    width: isMobile ? '160px' : '300px',
-                    height: isMobile ? '160px' : '300px',
-                  }}
-                />
-
+        {/* Desktop: side-by-side grid */}
+        {!isMobile && (
+          <div className="team-grid" style={styles.teamGrid}>
+            {founders.map((f, i) => (
+              <div key={i} style={styles.founderCard}>
+                <img src={f.image} alt={f.name} style={styles.image} />
                 <div style={styles.textBlock}>
-                  <h2 style={styles.name}>{founder.name}</h2>
-
-                  {/* Show role & bio only if not mobile */}
-                  {!isMobile && (
-                    <>
-                      <h4 style={styles.role}>{founder.role}</h4>
-                      <p style={styles.bio}>{founder.bio}</p>
-                    </>
-                  )}
+                  <h2 style={styles.name}>{f.name}</h2>
+                  <h4 style={styles.role}>{f.role}</h4>
+                  <p style={styles.bio}>{f.bio}</p>
                 </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Right Arrow */}
-          <button
-            style={{
-              ...styles.arrowRight,
-              ...(isMobile && { right: '0.3rem', fontSize: '1.2rem' }),
-            }}
-            onClick={() => handleChange('LEFT')}
-          >
-            <FaChevronRight />
-          </button>
-
-          {/* Progress Dots */}
-          <div style={styles.progressWrapper}>
-            {founders.map((_, i) => (
-              <div
-                key={i}
-                style={{
-                  ...styles.progressDot,
-                  backgroundColor: i === index ? '#02E673' : 'rgba(255, 255, 255, 0.3)',
-                }}
-              />
+              </div>
             ))}
           </div>
-        </section>
+        )}
+
+        {/* Mobile: carousel */}
+        {isMobile && (
+          <section {...swipeHandlers} style={styles.container}>
+            <button style={{ ...styles.arrowLeft, left: '0.3rem', fontSize: '1.2rem' }} onClick={() => handleChange('RIGHT')}>
+              <FaChevronLeft />
+            </button>
+
+            <div style={styles.slideWrapper}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: direction * 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -direction * 50 }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                  style={{ ...styles.slide, flexDirection: 'column', textAlign: 'center' }}
+                >
+                  <img src={founder.image} alt={founder.name} style={{ ...styles.image, width: '160px', height: '160px' }} />
+                  <div style={styles.textBlock}>
+                    <h2 style={styles.name}>{founder.name}</h2>
+                    <h4 style={styles.role}>{founder.role}</h4>
+                    <p style={{ ...styles.bio, fontSize: '0.9rem' }}>{founder.bio}</p>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <button style={{ ...styles.arrowRight, right: '0.3rem', fontSize: '1.2rem' }} onClick={() => handleChange('LEFT')}>
+              <FaChevronRight />
+            </button>
+
+            <div style={styles.progressWrapper}>
+              {founders.map((_, i) => (
+                <div key={i} style={{ ...styles.progressDot, backgroundColor: i === index ? '#02E673' : 'rgba(255, 255, 255, 0.3)' }} />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
 
       <style>{`
@@ -241,19 +219,41 @@ const styles = {
     paddingBottom: '2rem',
   },
   teamLabel: {
-    fontSize: '0.85rem',
+    textAlign: 'center',
+    fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)',
+    fontWeight: 700,
     letterSpacing: '3px',
-    textTransform: 'uppercase',
     color: '#E9EAE8',
-    opacity: 0.7,
-    fontWeight: 500,
-    marginBottom: '1.2rem',
-    fontFamily: 'Poppins, sans-serif',
+    marginBottom: 'clamp(1.5rem, 3vh, 2.5rem)',
+    textTransform: 'uppercase',
   },
 
-  // Existing founders card styles (kept intact)
+  teamGrid: {
+    display: 'flex',
+    gap: 'clamp(1.5rem, 3vw, 2.5rem)',
+    justifyContent: 'center',
+    width: '90%',
+    maxWidth: '1400px',
+    padding: '0 clamp(0.5rem, 1vw, 1rem)',
+    boxSizing: 'border-box',
+  },
+
+  founderCard: {
+    flex: '1 1 0',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    border: '1px solid rgba(255, 255, 255, 0.08)',
+    borderRadius: '12px',
+    padding: 'clamp(1.5rem, 3vw, 2.5rem)',
+    boxSizing: 'border-box',
+  },
+
+  // Mobile carousel styles
   container: {
-    width: 'min(90%, 1400px)',
+    width: 'min(95%, 1600px)',
     minHeight: 'clamp(280px, 50vw, 400px)',
     maxHeight: 'none',
     display: 'flex',
@@ -280,21 +280,25 @@ const styles = {
   slide: {
     display: 'flex',
     alignItems: 'center',
-    gap: 'clamp(1rem, 3vw, 2rem)',
+    gap: 'clamp(1.5rem, 3vw, 3rem)',
     flexWrap: 'nowrap',
-    maxWidth: '900px',
+    maxWidth: 'none',
+    width: '100%',
     padding: 'clamp(0.5rem, 2vw, 1rem) clamp(0.5rem, 2vw, 2rem)',
   },
   image: {
+    width: 'clamp(150px, 20vw, 220px)',
+    height: 'clamp(150px, 20vw, 220px)',
     borderRadius: '20%',
     objectFit: 'cover',
     border: '2px solid rgba(255, 255, 255, 0.1)',
+    marginBottom: '1rem',
   },
   textBlock: {
     flex: 1,
     color: '#E9EAE8',
     fontFamily: 'Poppins, sans-serif',
-    maxWidth: '600px',
+    maxWidth: 'none',
   },
   name: {
     fontSize: '1.4rem',

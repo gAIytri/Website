@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -72,7 +72,7 @@ const styles = {
     backdropFilter: 'blur(3px)',
     boxSizing: 'border-box',
     fontFamily: 'Poppins, sans-serif',
-    transition: 'height 0.3s ease, padding 0.3s ease',
+    transition: 'height 0.3s ease, padding 0.3s ease, background-color 0.3s ease, backdrop-filter 0.3s ease',
   },
   logoContainer: {
     display: 'flex',
@@ -160,7 +160,14 @@ const Navbar = ({ onServicesClick, onAboutClick, onContactClick }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 510px)' });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -172,7 +179,11 @@ const Navbar = ({ onServicesClick, onAboutClick, onContactClick }) => {
   };
 
   return (
-    <nav className="responsive-navbar" style={styles.navbar}>
+    <nav className="responsive-navbar" style={{
+      ...styles.navbar,
+      backgroundColor: scrolled ? 'rgba(17, 17, 17, 0.92)' : 'transparent',
+      backdropFilter: scrolled ? 'blur(12px)' : 'blur(3px)',
+    }}>
       {/* Left: Logo and Name */}
       <div style={styles.logoContainer}>
         <a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', cursor: 'pointer' }}>
