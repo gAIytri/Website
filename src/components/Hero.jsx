@@ -53,9 +53,10 @@ const styles = {
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     width: '100%',
+    paddingTop: 'clamp(20vh, 25vh, 30vh)',
   },
   headerSection: {
     display: 'flex',
