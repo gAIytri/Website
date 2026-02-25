@@ -23,9 +23,20 @@ heroStyleSheet.textContent = `
     overflow: hidden;
   }
 
+  @media (max-width: 768px) {
+    .hero-center-area {
+      min-height: auto !important;
+      padding-top: 15vh !important;
+      padding-bottom: 2rem !important;
+    }
+  }
+
   @media (max-width: 600px) {
     .hero-content-area {
       padding-top: 18vh !important;
+    }
+    .hero-center-area {
+      padding-top: 12vh !important;
     }
   }
 `;
@@ -39,7 +50,7 @@ const styles = {
     position: 'relative',
     width: '100%',
     overflow: 'hidden',
-    paddingBottom: 'clamp(3rem, 8vh, 5rem)',
+    paddingBottom: 'clamp(1rem, 3vh, 3rem)',
   },
   heroContent: {
     position: 'relative',
@@ -128,7 +139,7 @@ const Hero = () => {
   return (
     <div className="hero-section" style={styles.heroSection}>
       <div className="hero-content-area" style={styles.heroContent}>
-        <div style={styles.centerArea}>
+        <div className="hero-center-area" style={styles.centerArea}>
           <div style={styles.headerSection}>
             <h1 style={styles.heroHeading}>
               Empowering you

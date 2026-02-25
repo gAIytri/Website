@@ -6,17 +6,19 @@ const Footer = ({ onServicesClick, onAboutClick }) => {
   return (
     <footer style={styles.footer}>
       {/* Scroll to Top */}
-      <button
-        className="scroll-top-btn"
-        style={styles.scrollTopButton}
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        aria-label="Scroll to top"
-      >
-        <svg width="32" height="42" viewBox="0 0 24 30" fill="none" stroke="#000000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="12" y1="28" x2="12" y2="5" />
-          <polyline points="5 12 12 5 19 12" />
-        </svg>
-      </button>
+      <div style={styles.scrollTopRow}>
+        <button
+          className="scroll-top-btn"
+          style={styles.scrollTopButton}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label="Scroll to top"
+        >
+          <svg width="32" height="42" viewBox="0 0 24 30" fill="none" stroke="#000000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="12" y1="28" x2="12" y2="5" />
+            <polyline points="5 12 12 5 19 12" />
+          </svg>
+        </button>
+      </div>
       <div style={styles.container}>
         {/* Column 1: Logo + LinkedIn */}
         <div style={styles.column1}>
@@ -220,15 +222,20 @@ const styles = {
     margin: '0 auto',
     padding: 'clamp(1.5rem, 3vh, 2rem) clamp(1.5rem, 5vw, 3rem) 0',
   },
+  scrollTopRow: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '0 clamp(1.5rem, 5vw, 3rem)',
+    marginBottom: '1rem',
+    boxSizing: 'border-box',
+  },
   scrollTopButton: {
-    position: 'absolute',
-    top: 'clamp(3rem, 6vh, 5rem)',
-    right: 'clamp(8rem, 16vw, 14rem)',
     background: 'transparent',
     border: '2px solid #000000',
     width: '56px',
     height: '56px',
-    aspectRatio: '1',
     borderRadius: '50%',
     display: 'flex',
     alignItems: 'center',

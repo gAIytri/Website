@@ -69,7 +69,7 @@ const Services = () => {
       top: 0,
       left: '50%',
       width: activeWidth,
-      height: '100%',
+      height: isMobile ? 'auto' : '100%',
       transition: 'all 0.5s ease',
       borderRadius: '16px',
       overflow: 'hidden',
@@ -129,7 +129,10 @@ const Services = () => {
       <h2 style={styles.sectionHeader}>PRODUCTS & SERVICES</h2>
 
       <div {...swipeHandlers} style={styles.carouselContainer}>
-        <div style={styles.carouselTrack}>
+        <div style={{
+          ...styles.carouselTrack,
+          minHeight: isMobile ? '480px' : isTablet ? '350px' : '400px',
+        }}>
           {renderSlide(pillars[prevIndex], 'prev')}
           {renderSlide(pillars[activeIndex], 'active')}
           {renderSlide(pillars[nextIndex], 'next')}
@@ -154,11 +157,46 @@ const Services = () => {
         @media (max-width: 768px) {
           .services-card {
             flex-direction: column !important;
+            height: auto !important;
+          }
+          .services-card > div:first-child {
+            padding: 1rem 1.2rem 0.5rem !important;
+            gap: 0.3rem !important;
+            flex: none !important;
+          }
+          .services-card > div:first-child h3 {
+            font-size: 1rem !important;
+          }
+          .services-card > div:first-child p {
+            font-size: 0.72rem !important;
+            line-height: 1.5 !important;
           }
           .services-card > div:last-child {
             max-width: 100% !important;
             width: 100% !important;
-            align-self: center !important;
+            flex: 1 !important;
+            padding: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+          }
+          .services-card > div:last-child img {
+            width: 100% !important;
+            max-height: none !important;
+            border-radius: 0 0 16px 16px !important;
+            object-fit: cover !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .services-card > div:first-child {
+            padding: 0.8rem 1rem 0.4rem !important;
+          }
+          .services-card > div:first-child h3 {
+            font-size: 0.9rem !important;
+          }
+          .services-card > div:first-child p {
+            font-size: 0.65rem !important;
+            line-height: 1.45 !important;
           }
         }
       `}</style>
@@ -188,7 +226,6 @@ const styles = {
   carouselTrack: {
     position: 'relative',
     width: '100%',
-    minHeight: 'clamp(280px, 35vw, 400px)',
   },
   card: {
     display: 'flex',
