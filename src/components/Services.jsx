@@ -107,7 +107,7 @@ const Services = () => {
 
   const renderSlide = (pillar, position) => (
     <div
-      key={`${position}-${pillar.title}`}
+      key={pillar.title}
       style={getSlideStyle(position)}
       onClick={position === 'prev' ? goPrev : position === 'next' ? goNext : undefined}
     >
@@ -137,9 +137,24 @@ const Services = () => {
           ...styles.carouselTrack,
           minHeight: isMobile ? '480px' : isTablet ? '350px' : '400px',
         }}>
-          {renderSlide(pillars[prevIndex], 'prev')}
-          {renderSlide(pillars[activeIndex], 'active')}
-          {renderSlide(pillars[nextIndex], 'next')}
+          {isMobile ? (
+            pillars.map((pillar, i) => {
+              let position = 'hidden';
+              if (i === activeIndex) position = 'active';
+              else if (i === (activeIndex - 1 + pillars.length) % pillars.length) position = 'prev';
+              else if (i === (activeIndex + 1) % pillars.length) position = 'next';
+
+              if (position === 'hidden') return null;
+
+              return renderSlide(pillar, position);
+            })
+          ) : (
+            <>
+              {renderSlide(pillars[prevIndex], 'prev')}
+              {renderSlide(pillars[activeIndex], 'active')}
+              {renderSlide(pillars[nextIndex], 'next')}
+            </>
+          )}
         </div>
 
       </div>
