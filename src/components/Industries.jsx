@@ -175,7 +175,7 @@ const getMobileSlideStyle = (position) => {
 
 const styles = {
   section: {
-    padding: 'clamp(4rem, 8vh, 6rem) clamp(1.5rem, 5vw, 3rem)',
+    padding: 'clamp(4rem, 8vh, 6rem) 0',
     fontFamily: 'Poppins, sans-serif',
   },
   sectionHeader: {
@@ -186,6 +186,7 @@ const styles = {
     color: '#E9EAE8',
     marginBottom: '0.75rem',
     textTransform: 'uppercase',
+    padding: '0 clamp(1rem, 3vw, 2rem)',
   },
   tagline: {
     textAlign: 'center',
@@ -193,6 +194,7 @@ const styles = {
     color: 'rgba(233, 234, 232, 0.7)',
     margin: '0 0 clamp(2rem, 4vh, 3rem) 0',
     fontFamily: 'Poppins, sans-serif',
+    padding: '0 clamp(1rem, 3vw, 2rem)',
   },
   grid: {
     display: 'grid',

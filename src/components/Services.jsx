@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
 import aiWorkflows from '../assets/ai-workflows-green.png';
@@ -10,19 +10,19 @@ const pillars = [
     title: 'AI Automated Workflows',
     image: aiWorkflows,
     description:
-      'We design and deploy intelligent automations that eliminate repetitive work across your entire tech stack. CRM lead routing, invoice processing, onboarding sequences, email triage, calendar coordination, inventory alerts, approval chains, document generation, and cross-platform data syncing. If your team does it repeatedly, we automate it.',
+      'We design and deploy intelligent automations that eliminate repetitive work across your entire tech stack. From CRM lead routing and invoice processing to onboarding sequences, email triage, and approval chains, we connect your tools and let AI handle the busywork. If your team does it repeatedly, we automate it so they can focus on what matters.',
   },
   {
     title: 'AI Powered Analytics',
     image: dataAnalytics,
     description:
-      'We connect your data sources and deliver insights that drive action. Revenue forecasting, customer churn prediction, anomaly detection, cohort analysis, marketing attribution, inventory turnover tracking, pipeline health scoring, and automated executive summaries. Our systems turn scattered data into clear decisions.',
+      'We turn your scattered data into a strategic advantage. Our AI connects your sources and delivers real time insights like revenue forecasting, churn prediction, anomaly detection, marketing attribution, and pipeline health scoring. No more guesswork, no more waiting on reports. Just clear, actionable intelligence that drives smarter decisions.',
   },
   {
     title: 'AI Customized Systems',
     image: customAI,
     description:
-      'Custom AI built around your business. Internal knowledge assistants that answer from your docs, customer support copilots that resolve tickets faster, proposal generators that draft from past wins, sales enablement tools that prep reps before calls, compliance checkers that flag risk in real time, and operations dashboards that surface what matters. Built for how your team actually works.',
+      'We build interactive AI systems that become your team\'s smartest asset. From assistants that know your entire knowledge base to copilots that handle queries in real time, our systems learn your business and make everyone in it sharper, faster, and more effective across sales, compliance, operations, and every critical workflow your team relies on.',
   },
 ];
 
@@ -30,6 +30,8 @@ const Services = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
+  const [tallestHeight, setTallestHeight] = useState(0);
+  const measureRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -40,6 +42,48 @@ const Services = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Measure tallest card on mobile
+  useEffect(() => {
+    if (!isMobile || !measureRef.current) return;
+
+    const measure = () => {
+      const cards = measureRef.current.querySelectorAll('.measure-card');
+      let maxH = 0;
+      cards.forEach((card) => {
+        const h = card.getBoundingClientRect().height;
+        if (h > maxH) maxH = h;
+      });
+      if (maxH > 0) setTallestHeight(maxH);
+    };
+
+    // Measure after images load
+    const images = measureRef.current.querySelectorAll('img');
+    let loaded = 0;
+    const total = images.length;
+
+    const onLoad = () => {
+      loaded++;
+      if (loaded >= total) measure();
+    };
+
+    images.forEach((img) => {
+      if (img.complete) {
+        loaded++;
+      } else {
+        img.addEventListener('load', onLoad);
+      }
+    });
+
+    if (loaded >= total) measure();
+
+    // Also measure on resize
+    window.addEventListener('resize', measure);
+    return () => {
+      window.removeEventListener('resize', measure);
+      images.forEach((img) => img.removeEventListener('load', onLoad));
+    };
+  }, [isMobile]);
 
   const wrap = (i) => ((i % pillars.length) + pillars.length) % pillars.length;
 
@@ -57,9 +101,6 @@ const Services = () => {
     trackMouse: true,
   });
 
-  const prevIndex = wrap(activeIndex - 1);
-  const nextIndex = wrap(activeIndex + 1);
-
   const getSlideStyle = (position) => {
     if (isMobile) {
       const base = {
@@ -67,7 +108,7 @@ const Services = () => {
         top: 0,
         left: '50%',
         width: '80%',
-        height: '100%',
+        height: tallestHeight > 0 ? `${tallestHeight}px` : '100%',
         transition: 'all 0.4s ease',
         borderRadius: '16px',
         overflow: 'hidden',
@@ -114,7 +155,7 @@ const Services = () => {
       <div className="services-card" style={styles.card}>
         <div style={styles.textContent}>
           <h3 style={styles.cardTitle}>{pillar.title}</h3>
-          <p style={styles.description}>{pillar.description}</p>
+          <p className="services-desc" style={styles.description}>{pillar.description}</p>
         </div>
         <div style={styles.imageArea}>
           <img
@@ -128,33 +169,61 @@ const Services = () => {
     </div>
   );
 
+  const trackHeight = isMobile
+    ? (tallestHeight > 0 ? `${tallestHeight}px` : '400px')
+    : isTablet ? '350px' : '400px';
+
   return (
     <section style={styles.section}>
       <h2 style={styles.sectionHeader}>PRODUCTS & SERVICES</h2>
 
+      {/* Hidden measurement container - only on mobile */}
+      {isMobile && (
+        <div
+          ref={measureRef}
+          style={{
+            position: 'absolute',
+            visibility: 'hidden',
+            pointerEvents: 'none',
+            width: '80%',
+            left: '10%',
+          }}
+        >
+          {pillars.map((pillar) => (
+            <div key={pillar.title} className="measure-card" style={{ marginBottom: '8px' }}>
+              <div className="services-card" style={{ ...styles.card, position: 'relative' }}>
+                <div style={styles.textContent}>
+                  <h3 style={styles.cardTitle}>{pillar.title}</h3>
+                  <p className="services-desc" style={styles.description}>{pillar.description}</p>
+                </div>
+                <div style={styles.imageArea}>
+                  <img
+                    src={pillar.image}
+                    alt={pillar.title}
+                    style={styles.image}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       <div {...swipeHandlers} style={styles.carouselContainer}>
         <div style={{
           ...styles.carouselTrack,
-          minHeight: isMobile ? '480px' : isTablet ? '350px' : '400px',
+          height: trackHeight,
         }}>
-          {isMobile ? (
-            pillars.map((pillar, i) => {
-              let position = 'hidden';
-              if (i === activeIndex) position = 'active';
-              else if (i === (activeIndex - 1 + pillars.length) % pillars.length) position = 'prev';
-              else if (i === (activeIndex + 1) % pillars.length) position = 'next';
+          {pillars.map((pillar, i) => {
+            let position = 'hidden';
+            if (i === activeIndex) position = 'active';
+            else if (i === (activeIndex - 1 + pillars.length) % pillars.length) position = 'prev';
+            else if (i === (activeIndex + 1) % pillars.length) position = 'next';
 
-              if (position === 'hidden') return null;
+            if (position === 'hidden') return null;
 
-              return renderSlide(pillar, position);
-            })
-          ) : (
-            <>
-              {renderSlide(pillars[prevIndex], 'prev')}
-              {renderSlide(pillars[activeIndex], 'active')}
-              {renderSlide(pillars[nextIndex], 'next')}
-            </>
-          )}
+            return renderSlide(pillar, position);
+          })}
         </div>
 
       </div>
@@ -176,44 +245,49 @@ const Services = () => {
         @media (max-width: 768px) {
           .services-card {
             flex-direction: column !important;
-            height: auto !important;
           }
           .services-card > div:first-child {
-            padding: 1rem 1.2rem 0.5rem !important;
+            padding: 1rem 1rem 0.5rem 1rem !important;
             gap: 0.3rem !important;
             flex: none !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
           }
           .services-card > div:first-child h3 {
             font-size: 1rem !important;
           }
-          .services-card > div:first-child p {
+          .services-desc {
             font-size: 0.72rem !important;
             line-height: 1.5 !important;
           }
           .services-card > div:last-child {
             max-width: 100% !important;
             width: 100% !important;
-            flex: 1 !important;
-            padding: 0 !important;
+            padding: 0.5rem 1rem 0.25rem 1rem !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
+            box-sizing: border-box !important;
+          }
+          .services-card > div:last-child {
+            flex: 1 !important;
           }
           .services-card > div:last-child img {
             width: 100% !important;
-            max-height: none !important;
-            border-radius: 0 0 16px 16px !important;
-            object-fit: cover !important;
+            height: 100% !important;
+            border-radius: 12px !important;
+            object-fit: contain !important;
           }
         }
         @media (max-width: 480px) {
           .services-card > div:first-child {
-            padding: 0.8rem 1rem 0.4rem !important;
+            padding: 0.8rem 1rem 0.4rem 1rem !important;
           }
           .services-card > div:first-child h3 {
             font-size: 0.9rem !important;
           }
-          .services-card > div:first-child p {
+          .services-desc {
             font-size: 0.65rem !important;
             line-height: 1.45 !important;
           }
@@ -301,12 +375,12 @@ const styles = {
   dotsWrapper: {
     display: 'flex',
     justifyContent: 'center',
-    gap: '10px',
-    marginTop: 'clamp(1rem, 2vh, 1.5rem)',
+    gap: '8px',
+    marginTop: '1rem',
   },
   dot: {
-    width: '10px',
-    height: '10px',
+    width: '8px',
+    height: '8px',
     borderRadius: '50%',
     cursor: 'pointer',
     transition: 'background-color 0.3s ease',
