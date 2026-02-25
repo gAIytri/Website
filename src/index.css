@@ -6,7 +6,6 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-  overscroll-behavior-y: none;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -32,15 +31,16 @@ html, body {
   font-family: 'Poppins', sans-serif;
   overflow-x: hidden;
   overscroll-behavior-x: none;
-  overscroll-behavior-y: none;
 }
 
 /* Hide scrollbar while keeping scroll functionality */
 html {
   scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
 }
 html::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Edge */
+  width: 0;
+  height: 0;
 }
 h1 {
   font-size: 3.2em;
