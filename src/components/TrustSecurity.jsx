@@ -38,7 +38,7 @@ const TrustSecurity = () => {
             Gaiytri LLC (&ldquo;Gaiytri,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) is committed to protecting your privacy and the personal information you share with us. This Privacy Policy describes how we collect, use, store, and safeguard personal data when you access or use our public website and general communication channels (e.g. contact forms, email inquiries).
           </p>
           <p style={styles.body}>
-            This policy applies only to our publicly accessible website. Practices for specific products or services (such as SkillMap or AI driven solutions) will be explained in separate product or service specific privacy notices provided at the time of use.
+            This policy applies only to our publicly accessible website. Practices for specific products or services (such as custom AI systems or automation solutions) will be explained in separate product or service specific privacy notices provided at the time of use.
           </p>
 
           <h3 style={styles.subHeading}>2. Information We Collect</h3>
@@ -398,7 +398,7 @@ const styles = {
   pageTitle: {
     color: '#E9EAE8',
     fontSize: 'clamp(1.8rem, 4vw, 2.5rem)',
-    fontWeight: 600,
+    fontWeight: 500,
     textAlign: 'center',
     margin: '0 0 0.75rem 0',
   },
@@ -422,19 +422,19 @@ const styles = {
   sectionHeading: {
     color: '#E9EAE8',
     fontSize: 'clamp(1.3rem, 3vw, 1.8rem)',
-    fontWeight: 600,
+    fontWeight: 500,
     margin: '0 0 1.5rem 0',
   },
   subHeading: {
     color: '#E9EAE8',
     fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
-    fontWeight: 600,
+    fontWeight: 500,
     margin: '1.5rem 0 0.75rem 0',
   },
   subSubHeading: {
     color: 'rgba(233, 234, 232, 0.85)',
     fontSize: 'clamp(0.88rem, 1.8vw, 0.98rem)',
-    fontWeight: 600,
+    fontWeight: 500,
     margin: '1rem 0 0.5rem 0',
   },
   body: {

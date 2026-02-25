@@ -305,7 +305,7 @@ const styles = {
   sectionHeader: {
     textAlign: 'center',
     fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)',
-    fontWeight: 700,
+    fontWeight: 500,
     letterSpacing: '3px',
     color: '#E9EAE8',
     marginBottom: 'clamp(2rem, 4vh, 3rem)',
@@ -342,7 +342,7 @@ const styles = {
   },
   cardTitle: {
     fontSize: 'clamp(1.2rem, 2.5vw, 1.8rem)',
-    fontWeight: 700,
+    fontWeight: 500,
     color: '#FFFFFF',
     margin: 0,
     lineHeight: 1.2,

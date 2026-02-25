@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import logo from '../assets/logo.svg';
+import logo from '../assets/logoWordmark.svg';
 
 const Footer = ({ onServicesClick, onAboutClick }) => {
   return (
@@ -23,8 +23,7 @@ const Footer = ({ onServicesClick, onAboutClick }) => {
         {/* Column 1: Logo + LinkedIn */}
         <div style={styles.column1}>
           <div style={styles.logoSection}>
-            <img src={logo} alt="Gaiytri Logo" style={styles.logoImage} />
-            <span style={styles.companyName}>Gaiytri</span>
+            <img src={logo} alt="Gaiytri" style={styles.logoWordmark} />
           </div>
           <p style={styles.tagline}>Building Interactive AI Systems</p>
           <div style={styles.socials}>
@@ -144,15 +143,10 @@ const styles = {
     alignItems: 'center',
     gap: '0.75rem',
   },
-  logoImage: {
-    height: '40px',
+  logoWordmark: {
+    height: 'clamp(28px, 4vw, 36px)',
     width: 'auto',
     objectFit: 'contain',
-  },
-  companyName: {
-    fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)',
-    fontWeight: '600',
-    color: '#E9EAE8',
   },
   tagline: {
     fontSize: 'clamp(0.8rem, 1.5vw, 0.9rem)',
@@ -189,7 +183,7 @@ const styles = {
   },
   sectionHeading: {
     fontSize: 'clamp(0.75rem, 1.5vw, 0.85rem)',
-    fontWeight: '600',
+    fontWeight: '500',
     letterSpacing: '2px',
     color: '#E9EAE8',
     marginBottom: '0',

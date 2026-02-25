@@ -181,7 +181,7 @@ const styles = {
   sectionHeader: {
     textAlign: 'center',
     fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)',
-    fontWeight: 700,
+    fontWeight: 500,
     letterSpacing: '3px',
     color: '#E9EAE8',
     marginBottom: '0.75rem',
@@ -248,7 +248,7 @@ const styles = {
   },
   name: {
     fontSize: 'clamp(0.95rem, 1.8vw, 1.1rem)',
-    fontWeight: 700,
+    fontWeight: 500,
     color: '#E9EAE8',
     margin: '0 0 0.5rem 0',
   },

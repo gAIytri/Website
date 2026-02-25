@@ -220,7 +220,7 @@ const styles = {
   },
   mainHeading: {
     fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-    fontWeight: '600',
+    fontWeight: '500',
     textAlign: 'center',
     marginBottom: 'clamp(1rem, 3vh, 2rem)',
     color: '#E9EAE8',
