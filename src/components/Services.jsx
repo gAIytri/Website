@@ -61,44 +61,48 @@ const Services = () => {
   const nextIndex = wrap(activeIndex + 1);
 
   const getSlideStyle = (position) => {
-    const activeWidth = isMobile ? '85%' : isTablet ? '70%' : '63%';
-    const sideOffset = isMobile ? '98%' : isTablet ? '97%' : '96%';
+    if (isMobile) {
+      const base = {
+        position: 'absolute',
+        top: 0,
+        left: '50%',
+        width: '80%',
+        height: '100%',
+        transition: 'all 0.4s ease',
+        borderRadius: '16px',
+        overflow: 'hidden',
+      };
+
+      if (position === 'active') {
+        return { ...base, transform: 'translateX(-50%) scale(1)', opacity: 1, zIndex: 2 };
+      }
+      if (position === 'prev') {
+        return { ...base, transform: 'translateX(calc(-50% - 90%)) scale(0.85)', opacity: 0.4, zIndex: 1, cursor: 'pointer' };
+      }
+      return { ...base, transform: 'translateX(calc(-50% + 90%)) scale(0.85)', opacity: 0.4, zIndex: 1, cursor: 'pointer' };
+    }
+
+    const activeWidth = isTablet ? '70%' : '63%';
+    const sideOffset = isTablet ? '97%' : '96%';
 
     const base = {
       position: 'absolute',
       top: 0,
       left: '50%',
       width: activeWidth,
-      height: isMobile ? 'auto' : '100%',
+      height: '100%',
       transition: 'all 0.5s ease',
       borderRadius: '16px',
       overflow: 'hidden',
     };
 
     if (position === 'active') {
-      return {
-        ...base,
-        transform: 'translateX(-50%) scale(1)',
-        opacity: 1,
-        zIndex: 2,
-      };
+      return { ...base, transform: 'translateX(-50%) scale(1)', opacity: 1, zIndex: 2 };
     }
     if (position === 'prev') {
-      return {
-        ...base,
-        transform: `translateX(calc(-50% - ${sideOffset})) scale(0.85)`,
-        opacity: 0.5,
-        zIndex: 1,
-        cursor: 'pointer',
-      };
+      return { ...base, transform: `translateX(calc(-50% - ${sideOffset})) scale(0.85)`, opacity: 0.5, zIndex: 1, cursor: 'pointer' };
     }
-    return {
-      ...base,
-      transform: `translateX(calc(-50% + ${sideOffset})) scale(0.85)`,
-      opacity: 0.5,
-      zIndex: 1,
-      cursor: 'pointer',
-    };
+    return { ...base, transform: `translateX(calc(-50% + ${sideOffset})) scale(0.85)`, opacity: 0.5, zIndex: 1, cursor: 'pointer' };
   };
 
   const renderSlide = (pillar, position) => (
@@ -217,6 +221,7 @@ const styles = {
     color: '#E9EAE8',
     marginBottom: 'clamp(2rem, 4vh, 3rem)',
     textTransform: 'uppercase',
+    padding: '0 clamp(1rem, 3vw, 2rem)',
   },
   carouselContainer: {
     position: 'relative',
