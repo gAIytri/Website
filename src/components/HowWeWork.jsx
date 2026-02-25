@@ -97,14 +97,14 @@ const styles = {
     color: '#E9EAE8',
     marginBottom: '0.5rem',
     fontSize: 'clamp(0.85rem, 1.5vw, 1rem)',
-    fontWeight: 600,
+    fontWeight: 500,
   },
   tagline: {
     textAlign: 'center',
     fontSize: 'clamp(1.3rem, 3.5vw, 2.2rem)',
     color: '#E9EAE8',
     marginBottom: '3rem',
-    fontWeight: 600,
+    fontWeight: 500,
   },
   grid: {
     display: 'flex',
@@ -128,7 +128,7 @@ const styles = {
   },
   title: {
     color: '#ffffff',
-    fontWeight: 700,
+    fontWeight: 500,
     fontSize: 'clamp(0.95rem, 2vw, 1.05rem)',
     margin: '0 0 0.5rem 0',
   },

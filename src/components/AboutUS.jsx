@@ -186,11 +186,11 @@ const styles = {
     textAlign: 'left',
     opacity: 0.7,
     marginBottom: '1rem',
-    fontWeight: 700,
+    fontWeight: 500,
   },
   headline: {
     fontSize: 'clamp(1.3rem, 2.8vw, 1.9rem)',
-    fontWeight: 700,
+    fontWeight: 500,
     lineHeight: 1.3,
     textAlign: 'left',
     margin: '0 0 1rem',
@@ -204,7 +204,7 @@ const styles = {
   },
   tagline: {
     fontSize: 'clamp(1.05rem, 2vw, 1.25rem)',
-    fontWeight: 700,
+    fontWeight: 500,
     lineHeight: 1.5,
     textAlign: 'left',
     margin: 0,
@@ -221,7 +221,7 @@ const styles = {
   teamLabel: {
     textAlign: 'center',
     fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)',
-    fontWeight: 700,
+    fontWeight: 500,
     letterSpacing: '3px',
     color: '#E9EAE8',
     marginBottom: 'clamp(1.5rem, 3vh, 2.5rem)',
@@ -302,7 +302,7 @@ const styles = {
   },
   name: {
     fontSize: '1.4rem',
-    fontWeight: '600',
+    fontWeight: '500',
    margin:0,
     color: '#E9EAE8'
   },

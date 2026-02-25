@@ -85,6 +85,7 @@ const styles = {
     textAlign: 'center',
     fontSize: 'clamp(1.8rem, 5vw, 4.5rem)',
     fontFamily: 'Poppins, sans-serif',
+    fontWeight: 500,
     color: '#E9EAE8',
     margin: 0,
     lineHeight: '1',
@@ -99,7 +100,7 @@ const styles = {
   rotatingWord: {
     display: 'inline-block',
     color: '#02E673',
-    fontWeight: 600,
+    fontWeight: 500,
   },
   subtext: {
     fontSize: 'clamp(0.9rem, 2vw, 1.25rem)',
